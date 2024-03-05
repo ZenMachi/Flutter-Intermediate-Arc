@@ -1,4 +1,5 @@
 import 'package:declarative_navigation/model/quote.dart';
+import 'package:declarative_navigation/screen/form_screen.dart';
 import 'package:declarative_navigation/screen/quote_detail_screen.dart';
 import 'package:declarative_navigation/screen/quotes_list_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,8 @@ class MyRouterDelegate extends RouterDelegate
   final GlobalKey<NavigatorState> _navigatorKey;
 
   MyRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
+
+  bool isForm = false;
 
   String? selectedQuote;
 
@@ -25,6 +28,10 @@ class MyRouterDelegate extends RouterDelegate
               selectedQuote = quoteId;
               notifyListeners();
             },
+            toFormScreen: () {
+              isForm = true;
+              notifyListeners();
+            },
           ),
         ),
         if (selectedQuote != null)
@@ -34,6 +41,16 @@ class MyRouterDelegate extends RouterDelegate
               quoteId: selectedQuote!,
             ),
           ),
+        if (isForm)
+          MaterialPage(
+            key: ValueKey("FormScreen"),
+            child: FormScreen(
+              onSend: () {
+                isForm = false;
+                notifyListeners();
+              },
+            ),
+          )
       ],
       onPopPage: (route, result) {
         final didPop = route.didPop(result);
@@ -42,6 +59,7 @@ class MyRouterDelegate extends RouterDelegate
         }
 
         selectedQuote = null;
+        isForm = false;
         notifyListeners();
 
         return true;
