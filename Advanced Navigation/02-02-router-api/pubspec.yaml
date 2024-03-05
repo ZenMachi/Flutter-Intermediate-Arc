@@ -14,7 +14,9 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   provider:
-  shared_preferences: 
+  shared_preferences:
+  flutter_web_plugins:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
