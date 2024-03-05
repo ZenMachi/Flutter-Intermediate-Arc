@@ -1,3 +1,4 @@
+import 'package:declarative_navigation/model/page_configuration.dart';
 import 'package:flutter/material.dart';
 
 import '../db/auth_repository.dart';
@@ -9,7 +10,7 @@ import '../screen/register_screen.dart';
 import '../screen/splash_screen.dart';
 
 /// todo 1: create new class router-delegate
-class MyRouterDelegate extends RouterDelegate
+class MyRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   /// todo 2: add navigator key,
   /// change other method, and
@@ -17,6 +18,7 @@ class MyRouterDelegate extends RouterDelegate
 
   final GlobalKey<NavigatorState> _navigatorKey;
   final AuthRepository authRepository;
+  bool? isUnknown;
 
   List<Page> historyStack = [];
   bool? isLoggedIn;
@@ -131,6 +133,44 @@ class MyRouterDelegate extends RouterDelegate
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    /* Do Nothing */
+    if (configuration.isUnknownPage) {
+      isUnknown = true;
+      isRegister = false;
+    } else if (configuration.isRegisterPage) {
+      isRegister = true;
+    } else if (configuration.isHomePage ||
+        configuration.isLoginPage ||
+        configuration.isSplashPage) {
+      isUnknown = false;
+      selectedQuote = null;
+      isRegister = false;
+    } else if (configuration.isDetailPage) {
+      isUnknown = false;
+      isRegister = false;
+      selectedQuote = configuration.quoteId.toString();
+    } else {
+      print(' Could not set new route');
+    }
+    notifyListeners();
+  }
+
+  @override
+  // TODO: implement currentConfiguration
+  PageConfiguration? get currentConfiguration {
+    if (isLoggedIn == null) {
+      return PageConfiguration.splash();
+    } else if (isRegister == true) {
+      return PageConfiguration.register();
+    } else if (isLoggedIn == false) {
+      return PageConfiguration.login();
+    } else if (isUnknown == true) {
+      return PageConfiguration.unknown();
+    } else if (selectedQuote == null) {
+      return PageConfiguration.home();
+    } else if (selectedQuote != null) {
+      return PageConfiguration.detailQuote(selectedQuote!);
+    } else {
+      return null;
+    }
   }
 }
