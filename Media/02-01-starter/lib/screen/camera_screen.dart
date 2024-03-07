@@ -10,14 +10,18 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends State<CameraScreen>
+    with WidgetsBindingObserver {
   bool _isCameraInitialized = false;
+  bool _isBackCameraSelected = true;
 
   CameraController? controller;
 
   @override
   void initState() {
     // TODO: implement initState
+    WidgetsBinding.instance.addObserver(this);
+
     onNewCameraSelected(widget.cameras.first);
 
     super.initState();
@@ -56,16 +60,36 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    final CameraController? cameraController = controller;
+
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      onNewCameraSelected(cameraController.description);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
     // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
     controller?.dispose();
     super.dispose();
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     final previousCameraController = controller;
-    final cameraController =
-        CameraController(cameraDescription, ResolutionPreset.medium);
+    final cameraController = CameraController(
+      cameraDescription,
+      ResolutionPreset.medium,
+    );
 
     await previousCameraController?.dispose();
 
@@ -99,5 +123,19 @@ class _CameraScreenState extends State<CameraScreen> {
     navigator.pop(image);
   }
 
-  void _onCameraSwitch() {}
+  void _onCameraSwitch() {
+    if (widget.cameras.length == 1) return;
+
+    setState(() {
+      _isCameraInitialized = false;
+    });
+
+    onNewCameraSelected(
+      widget.cameras[_isBackCameraSelected ? 1 : 0],
+    );
+
+    setState(() {
+      _isBackCameraSelected = !_isBackCameraSelected;
+    });
+  }
 }
