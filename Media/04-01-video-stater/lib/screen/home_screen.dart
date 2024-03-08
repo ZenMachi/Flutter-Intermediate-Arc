@@ -41,39 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Consumer<VideoNotifier>(
-                  builder: (context, provider, child) {
-                    final duration = provider.duration;
-                    final position = provider.position;
+                Consumer<VideoNotifier>(builder: (context, provider, child) {
+                  final duration = provider.duration;
+                  final position = provider.position;
 
-                    return BufferSliderControllerWidget(
-                      maxValue: duration.inSeconds.toDouble(),
-                      currentValue: position.inSeconds.toDouble(),
-                      minText: durationToTimeString(position),
-                      maxText: durationToTimeString(duration),
-                      onChanged: (value) async {
-                        final newPosition = Duration(seconds: value.toInt());
-                        await controller?.seekTo(newPosition);
+                  return BufferSliderControllerWidget(
+                    maxValue: duration.inSeconds.toDouble(),
+                    currentValue: position.inSeconds.toDouble(),
+                    minText: durationToTimeString(position),
+                    maxText: durationToTimeString(duration),
+                    onChanged: (value) async {
+                      final newPosition = Duration(seconds: value.toInt());
+                      await controller?.seekTo(newPosition);
 
-                        await controller?.play();
-                      },
-                    );
-                  }
-                ),
-                Consumer<VideoNotifier>(
-                  builder: (context, provider, child) {
-                    final isPlay = provider.isPlay;
-                    return VideoControllerWidget(
-                      onPlayTapped: () {
-                        controller?.play();
-                      },
-                      onPauseTapped: () {
-                        controller?.pause();
-                      },
-                      isPlay: isPlay,
-                    );
-                  }
-                ),
+                      await controller?.play();
+                    },
+                  );
+                }),
+                Consumer<VideoNotifier>(builder: (context, provider, child) {
+                  final isPlay = provider.isPlay;
+                  return VideoControllerWidget(
+                    onPlayTapped: () {
+                      controller?.play();
+                    },
+                    onPauseTapped: () {
+                      controller?.pause();
+                    },
+                    isPlay: isPlay,
+                  );
+                }),
               ],
             ),
           )
@@ -100,8 +96,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void videoInitialize() async {
     final previousVideoController = controller;
-    final videoController = VideoPlayerController.asset(
+    /*final videoController = VideoPlayerController.asset(
       "assets/butterfly.mp4",
+    );*/
+
+    /// Assets from online
+    final videoController = VideoPlayerController.networkUrl(
+      Uri.parse("https://github.com/dicodingacademy/assets/releases/download/release-video/VideoDicoding.mp4",)
     );
 
     await previousVideoController?.dispose();
