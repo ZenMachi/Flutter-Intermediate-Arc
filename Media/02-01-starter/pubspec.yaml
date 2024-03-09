@@ -19,7 +19,11 @@ dependencies:
   image_picker_windows:
 
   camera:
-  camera_windows: 
+  camera_windows:
+
+  http:
+
+  image:
 
 dev_dependencies:
   flutter_test:
