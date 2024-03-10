@@ -1,3 +1,4 @@
+import 'package:dicoding_subscriptions/widget/flag_icon_widget.dart';
 import 'package:dicoding_subscriptions/widget/max_width_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +19,7 @@ class HomePage extends StatelessWidget {
         ),
         title: const Text("Dicoding Academy"),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.flag),
-          ),
+          const FlagIconWidget(),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.settings),
