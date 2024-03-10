@@ -1,7 +1,9 @@
 import 'package:dicoding_subscriptions/classes/benefit_feature.dart';
 import 'package:dicoding_subscriptions/common.dart';
 import 'package:dicoding_subscriptions/widget/table_cell_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class BenefitTable extends StatelessWidget {
   const BenefitTable({Key? key}) : super(key: key);
@@ -26,24 +28,36 @@ class BenefitTable extends StatelessWidget {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
         TableRow(children: [
-          TableCellWidget(
-            text: AppLocalizations.of(context)!.benefitFeatureTitle1,
-            isBold: true,
+          ExcludeSemantics(
+            child: TableCellWidget(
+              text: AppLocalizations.of(context)!.benefitFeatureTitle1,
+              isBold: true,
+            ),
           ),
-          TableCellWidget(
-            text: AppLocalizations.of(context)!.benefitFeatureTitle2,
-            isBold: true,
+          ExcludeSemantics(
+            child: TableCellWidget(
+              text: AppLocalizations.of(context)!.benefitFeatureTitle2,
+              isBold: true,
+            ),
           ),
-          TableCellWidget(
-            text: AppLocalizations.of(context)!.benefitFeatureTitle3,
-            isBold: true,
+          ExcludeSemantics(
+            child: TableCellWidget(
+              text: AppLocalizations.of(context)!.benefitFeatureTitle3,
+              isBold: true,
+            ),
           ),
         ]),
         ...benefitFeatureList.map((benefitFeature) {
           return TableRow(
             children: [
-              TableCellWidget(
-                text: benefitFeature.feature,
+              Semantics(
+                label: AppLocalizations.of(context)!
+                    .accBenefitFeatureItem1(benefitFeature.feature),
+                child: ExcludeSemantics(
+                  child: TableCellWidget(
+                    text: benefitFeature.feature,
+                  ),
+                ),
               ),
               TableCellWidget(
                 check: benefitFeature.freeBenefit,
