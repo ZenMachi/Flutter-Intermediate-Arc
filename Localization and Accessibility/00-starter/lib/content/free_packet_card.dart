@@ -1,3 +1,4 @@
+import 'package:dicoding_subscriptions/common.dart';
 import 'package:flutter/material.dart';
 
 
@@ -22,7 +23,7 @@ class FreePackageCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Berlangganan 15 hari",
+             AppLocalizations.of(context)!.freePackageTitle(15),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -32,7 +33,7 @@ class FreePackageCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Gratis",
+              AppLocalizations.of(context)!.freePackagePrice,
               textAlign: TextAlign.center,
             ),
           ),
@@ -41,7 +42,7 @@ class FreePackageCard extends StatelessWidget {
             child: OutlinedButton(
               onPressed: () {},
               child: Text(
-                "Coba sekarang",
+                AppLocalizations.of(context)!.freePackageButton,
                 textAlign: TextAlign.center,
               ),
             ),
