@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:story_app/widgets/card_story.dart';
+import 'package:story_app/features/authentication/ui/register_page.dart';
+import 'package:story_app/features/story/ui/story_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,16 +16,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Stories'),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: ListView(
-          children: [
-            CardStory(onTap: () {},),
-            CardStory(onTap: () {},),
-            CardStory(onTap: () {},),
-          ],
-        ),
-      ),
+      body: StoryPage()
     );
   }
 }

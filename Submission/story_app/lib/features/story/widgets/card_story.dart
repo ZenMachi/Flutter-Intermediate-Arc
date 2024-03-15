@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class CardStory extends StatelessWidget {
+  final String imgUrl;
+  final String name;
+  final String description;
   final Function() onTap;
-  const CardStory({super.key, required this.onTap});
+
+  const CardStory(
+      {super.key,
+      required this.onTap,
+      required this.name,
+      required this.description,
+      required this.imgUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +31,10 @@ class CardStory extends StatelessWidget {
                   topRight: Radius.circular(8),
                 ),
                 child: Image.network(
-                  'https://raw.githubusercontent.com/ZenMachi/randomrepo/main/FB_IMG_1674627184345%20(1)-min.png',
+                  imgUrl,
                   fit: BoxFit.cover,
                   width: 100.w,
+                  height: 256,
                 ),
               ),
               Padding(
@@ -32,9 +42,18 @@ class CardStory extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 8,),
-                    Text("Lorem Ipsum", style: TextStyle(fontWeight: FontWeight.bold),),
-                    Text("Dolor Sit Amet Conseti"),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),
