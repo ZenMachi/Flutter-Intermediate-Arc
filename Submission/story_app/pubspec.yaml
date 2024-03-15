@@ -40,6 +40,9 @@ dependencies:
 
   http:
   provider:
+  go_router:
+  flutter_web_plugins:
+    sdk: flutter
 
   intl:
   shared_preferences:

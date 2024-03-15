@@ -25,17 +25,21 @@ class CardStory extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.account_circle_rounded),
+                    SizedBox(width: 8,),
+                    Text(name),
+                  ],
                 ),
-                child: Image.network(
-                  imgUrl,
-                  fit: BoxFit.cover,
-                  width: 100.w,
-                  height: 256,
-                ),
+              ),
+              Image.network(
+                imgUrl,
+                fit: BoxFit.cover,
+                width: 100.w,
+                height: 256,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8, bottom: 8),

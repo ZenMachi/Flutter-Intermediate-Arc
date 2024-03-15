@@ -1,8 +1,10 @@
 
+import 'package:story_app/features/story/data/model/story.dart';
+
 class StoriesResponse {
   bool error;
   String message;
-  List<ListStory> listStory;
+  List<Story> listStory;
 
   StoriesResponse({
     required this.error,
@@ -14,7 +16,7 @@ class StoriesResponse {
   factory StoriesResponse.fromJson(Map<String, dynamic> json) => StoriesResponse(
     error: json["error"],
     message: json["message"],
-    listStory: List<ListStory>.from(json["listStory"].map((x) => ListStory.fromJson(x))),
+    listStory: List<Story>.from(json["listStory"].map((x) => Story.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -24,42 +26,4 @@ class StoriesResponse {
   };
 }
 
-class ListStory {
-  String id;
-  String name;
-  String description;
-  String photoUrl;
-  DateTime createdAt;
-  double? lat;
-  double? lon;
 
-  ListStory({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.photoUrl,
-    required this.createdAt,
-    this.lat,
-    this.lon,
-  });
-
-  factory ListStory.fromJson(Map<String, dynamic> json) => ListStory(
-    id: json["id"],
-    name: json["name"],
-    description: json["description"],
-    photoUrl: json["photoUrl"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    lat: json["lat"].toDouble(),
-    lon: json["lon"].toDouble(),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "description": description,
-    "photoUrl": photoUrl,
-    "createdAt": createdAt.toIso8601String(),
-    "lat": lat,
-    "lon": lon,
-  };
-}
