@@ -20,9 +20,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Stories'),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _bottomNavIndex,
         items: _bottomNavBarItems,
@@ -57,5 +54,4 @@ class _HomePageState extends State<HomePage> {
         return context.go(Routes.root);
     }
   }
-
 }
