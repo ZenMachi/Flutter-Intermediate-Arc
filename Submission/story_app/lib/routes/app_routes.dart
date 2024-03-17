@@ -25,7 +25,8 @@ class AppRouter {
           GoRoute(
             name: Routes.root,
             path: Routes.root,
-            builder: (context, state) => const StoryPage(),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: StoryPage()),
             routes: [
               GoRoute(
                 name: Routes.storyDetailsNamedPage,
