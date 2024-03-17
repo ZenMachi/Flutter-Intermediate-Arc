@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:story_app/features/story/provider/api_provider.dart';
+import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/utils/date_time_extension.dart';
 import 'package:story_app/utils/result_state.dart';
 
@@ -17,7 +17,7 @@ class StoryDetailPage extends StatefulWidget {
 class _StoryDetailPageState extends State<StoryDetailPage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ApiProvider>(
+    return Consumer<StoryProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
           return const Center(

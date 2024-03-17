@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/story/provider/api_provider.dart';
+import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/features/story/widgets/card_story.dart';
 import 'package:story_app/utils/result_state.dart';
 
@@ -11,7 +11,7 @@ class StoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ApiProvider>(
+    return Consumer<StoryProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
           return const Center(
@@ -36,7 +36,7 @@ class StoryPage extends StatelessWidget {
 
                   return CardStory(
                     onTap: () {
-                      Provider.of<ApiProvider>(context, listen: false)
+                      Provider.of<StoryProvider>(context, listen: false)
                           .fetchDetailStory(id);
                       context.goNamed(Routes.storyDetailsNamedPage,
                           pathParameters: params);

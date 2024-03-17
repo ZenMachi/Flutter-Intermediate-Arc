@@ -7,7 +7,7 @@ import 'package:story_app/common/url_strategy.dart';
 import 'package:story_app/features/authentication/ui/login_page.dart';
 import 'package:story_app/features/authentication/ui/register_page.dart';
 import 'package:story_app/features/story/data/remote/remote_data_source.dart';
-import 'package:story_app/features/story/provider/api_provider.dart';
+import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/home_page.dart';
 import 'package:story_app/routes/app_routes.dart';
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           providers: [
             ChangeNotifierProvider(
               create: (context) =>
-                  ApiProvider(apiService: RemoteDataSource(Client()))..fetchStories(),
+                  StoryProvider(apiService: RemoteDataSource(Client()))..fetchStories(),
             ),
           ],
           child: MaterialApp.router(

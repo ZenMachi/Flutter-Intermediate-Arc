@@ -1,12 +1,11 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
+import 'package:story_app/features/story/data/remote/model/detail_story_response.dart';
+import 'package:story_app/features/story/data/remote/model/stories_response.dart';
 import 'package:story_app/features/story/data/remote/remote_data_source.dart';
 import 'package:story_app/utils/result_state.dart';
 
-class ApiProvider extends ChangeNotifier {
+class StoryProvider extends ChangeNotifier {
   final RemoteDataSource apiService;
   late ResultState _state;
 
@@ -21,7 +20,7 @@ class ApiProvider extends ChangeNotifier {
 
   DetailStoryResponse get storyDetailResult => _detailStoryResponse;
 
-  ApiProvider({required this.apiService});
+  StoryProvider({required this.apiService});
 
   Future<dynamic> fetchStories() async {
     try {

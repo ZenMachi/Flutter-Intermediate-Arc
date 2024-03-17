@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' show Client;
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
+import 'package:story_app/features/story/data/remote/model/detail_story_response.dart';
+import 'package:story_app/features/story/data/remote/model/stories_response.dart';
 
 class RemoteDataSource {
   static const _baseUrl = "story-api.dicoding.dev";
