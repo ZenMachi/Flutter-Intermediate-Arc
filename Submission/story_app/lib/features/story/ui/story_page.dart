@@ -11,52 +11,63 @@ class StoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Consumer<ApiProvider>(
-        builder: (context, provider, child) {
-          if (provider.state == ResultState.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (provider.state == ResultState.hasData) {
-            return ListView.builder(
+    return Consumer<ApiProvider>(
+      builder: (context, provider, child) {
+        if (provider.state == ResultState.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (provider.state == ResultState.hasData) {
+          return NestedScrollView(
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, isScrolled) => [
+                SliverAppBar(
+                  title: Text('My Stories'),
+                  floating: true,
+                )
+              ],
+              body: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                separatorBuilder: (context, index) => SizedBox(height: 12),
                 itemCount: provider.storiesResult.listStory.length,
                 itemBuilder: (context, index) {
                   final id = provider.storiesResult.listStory[index].id;
-                  final params = {
-                    "id": id
-                  };
+                  final params = {"id": id};
+
                   return CardStory(
                     onTap: () {
-                      Provider.of<ApiProvider>(context, listen: false).fetchDetailStory(id);
-                      context.goNamed(Routes.storyDetailsNamedPage, pathParameters: params);
+                      Provider.of<ApiProvider>(context, listen: false)
+                          .fetchDetailStory(id);
+                      context.goNamed(Routes.storyDetailsNamedPage,
+                          pathParameters: params);
                     },
                     name: provider.storiesResult.listStory[index].name,
                     description:
                         provider.storiesResult.listStory[index].description,
                     imgUrl: provider.storiesResult.listStory[index].photoUrl,
                   );
-                });
-          } else if (provider.state == ResultState.noData) {
-            return Center(
-              child: Material(
-                child: Text(provider.message),
+                },
               ),
             );
-          } else if (provider.state == ResultState.error) {
-            return Center(
-              child: Material(
-                child: Text("Error -> ${provider.message}"),
-              ),
-            );
-          } else {
-            return const Center(
-              child: Text('Unknown Error'),
-            );
-          }
-        },
-      ),
+
+        } else if (provider.state == ResultState.noData) {
+          return Center(
+            child: Material(
+              child: Text(provider.message),
+            ),
+          );
+        } else if (provider.state == ResultState.error) {
+          return Center(
+            child: Material(
+              child: Text("Error -> ${provider.message}"),
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text('Unknown Error'),
+          );
+        }
+      },
     );
   }
 }
