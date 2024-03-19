@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:story_app/features/story/data/remote/model/detail_story_response.dart';
 import 'package:story_app/features/story/data/remote/model/stories_response.dart';
-import 'package:story_app/features/story/data/remote/remote_data_source.dart';
+import 'package:story_app/features/story/data/remote/story_remote_data_source.dart';
 import 'package:story_app/utils/result_state.dart';
 
 class StoryProvider extends ChangeNotifier {
-  final RemoteDataSource apiService;
+  final StoryRemoteDataSource apiService;
   late ResultState _state;
 
   ResultState get state => _state;
@@ -32,16 +32,19 @@ class StoryProvider extends ChangeNotifier {
       if (result.listStory.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
+
         return _message = "There is no data";
       } else {
         _state = ResultState.hasData;
         notifyListeners();
+
         return _storiesResponse = result;
       }
     } catch (e) {
       _state = ResultState.error;
       log('ErrorFetch --> $e');
       notifyListeners();
+
       return _message = "Please Check Your Internet Connection";
     }
   }
@@ -56,16 +59,19 @@ class StoryProvider extends ChangeNotifier {
       if (result.error == true) {
         _state = ResultState.error;
         notifyListeners();
+
         return _message = "Error Reason: ${result.message}";
       } else {
         _state = ResultState.hasData;
         notifyListeners();
+
         return _detailStoryResponse = result;
       }
     } catch (e) {
       _state = ResultState.error;
       log('ErrorFetch --> $e');
       notifyListeners();
+
       return _message = "Please Check Your Internet Connection";
     }
   }

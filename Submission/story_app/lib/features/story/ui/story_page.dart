@@ -5,6 +5,8 @@ import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/features/story/widgets/card_story.dart';
 import 'package:story_app/utils/result_state.dart';
+import 'package:story_app/widgets/error_page.dart';
+import 'package:story_app/widgets/loading_page.dart';
 
 class StoryPage extends StatelessWidget {
   const StoryPage({super.key});
@@ -14,58 +16,47 @@ class StoryPage extends StatelessWidget {
     return Consumer<StoryProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingPage();
         } else if (provider.state == ResultState.hasData) {
           return NestedScrollView(
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, isScrolled) => [
-                SliverAppBar(
-                  title: Text('My Stories'),
-                  floating: true,
-                )
-              ],
-              body: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                separatorBuilder: (context, index) => SizedBox(height: 12),
-                itemCount: provider.storiesResult.listStory.length,
-                itemBuilder: (context, index) {
-                  final id = provider.storiesResult.listStory[index].id;
-                  final params = {"id": id};
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, isScrolled) => [
+              SliverAppBar(
+                title: Text('My Stories'),
+                floating: true,
+              )
+            ],
+            body: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              separatorBuilder: (context, index) => SizedBox(height: 12),
+              itemCount: provider.storiesResult.listStory.length,
+              itemBuilder: (context, index) {
+                final id = provider.storiesResult.listStory[index].id;
+                final params = {"id": id};
 
-                  return CardStory(
-                    onTap: () {
-                      Provider.of<StoryProvider>(context, listen: false)
-                          .fetchDetailStory(id);
-                      context.goNamed(Routes.storyDetailsNamedPage,
-                          pathParameters: params);
-                    },
-                    name: provider.storiesResult.listStory[index].name,
-                    description:
-                        provider.storiesResult.listStory[index].description,
-                    imgUrl: provider.storiesResult.listStory[index].photoUrl,
-                  );
-                },
-              ),
-            );
-
+                return CardStory(
+                  onTap: () {
+                    Provider.of<StoryProvider>(context, listen: false)
+                        .fetchDetailStory(id);
+                    context.goNamed(
+                      Routes.storyDetailsNamedPage,
+                      pathParameters: params,
+                    );
+                  },
+                  name: provider.storiesResult.listStory[index].name,
+                  description:
+                      provider.storiesResult.listStory[index].description,
+                  imgUrl: provider.storiesResult.listStory[index].photoUrl,
+                );
+              },
+            ),
+          );
         } else if (provider.state == ResultState.noData) {
-          return Center(
-            child: Material(
-              child: Text(provider.message),
-            ),
-          );
+          return ErrorPage(error: provider.message);
         } else if (provider.state == ResultState.error) {
-          return Center(
-            child: Material(
-              child: Text("Error -> ${provider.message}"),
-            ),
-          );
+          return ErrorPage(error: "Error -> ${provider.message}");
         } else {
-          return const Center(
-            child: Text('Unknown Error'),
-          );
+          return const ErrorPage(error: 'Unknown Error');
         }
       },
     );
