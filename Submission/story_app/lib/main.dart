@@ -11,6 +11,7 @@ import 'package:story_app/features/settings/data/local/settings_local_data_sourc
 import 'package:story_app/features/settings/provider/settings_provider.dart';
 import 'package:story_app/features/story/data/remote/story_remote_data_source.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/routes/app_routes.dart';
 
 void main() {
@@ -66,20 +67,25 @@ class _MyAppState extends State<MyApp> {
               create: (context) => authProvider,
             ),
             ChangeNotifierProvider(
-              create: (context) => settingsProvider..getTheme(),
+              create: (context) => settingsProvider..getTheme()..getLocale(),
             ),
           ],
           child: Consumer<SettingsProvider>(
             builder: (context, provider, child) {
               return MaterialApp.router(
-                routeInformationProvider: AppRouter.router.routeInformationProvider,
+                routeInformationProvider:
+                    AppRouter.router.routeInformationProvider,
                 routeInformationParser: AppRouter.router.routeInformationParser,
                 routerDelegate: AppRouter.router.routerDelegate,
                 debugShowCheckedModeBanner: false,
                 title: 'Flutter Demo',
+                locale: provider.locale,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
                 themeMode: provider.themeMode,
                 theme: ThemeData(
-                  colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+                  colorScheme:
+                      ColorScheme.fromSeed(seedColor: Colors.lightGreen),
                   useMaterial3: true,
                 ),
                 darkTheme: ThemeData(
@@ -90,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                   useMaterial3: true,
                 ),
               );
-            }
+            },
           ),
         );
       });

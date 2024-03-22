@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/authentication/data/model/login.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+
     return Consumer<AuthProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -45,10 +48,10 @@ class _LoginPageState extends State<LoginPage> {
                             validator: (value) =>
                                 EmailValidator.validate(value!)
                                     ? null
-                                    : 'Please Enter your email',
-                            decoration: const InputDecoration(
+                                    : content.errorValidateEmail,
+                            decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: "Email",
+                              labelText: content.textEmail,
                             ),
                           ),
                           const SizedBox(
@@ -57,13 +60,13 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: passwordController,
                             obscureText: true,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: "Password",
+                              labelText: content.textPassword,
                             ),
                             validator: (value) {
                               if (value == null || value.length < 8) {
-                                return 'Minimal character length is 8';
+                                return content.errorValidatePass;
                               }
                               return null;
                             },
@@ -74,13 +77,13 @@ class _LoginPageState extends State<LoginPage> {
                               if (formKey.currentState!.validate()) {
                                 final email = emailController.text.toString();
                                 final password =
-                                passwordController.text.toString();
+                                    passwordController.text.toString();
                                 final credentials = LoginInfo(
                                   email: email,
                                   password: password,
                                 );
                                 final isLogin =
-                                await provider.loginUser(credentials);
+                                    await provider.loginUser(credentials);
                                 if (context.mounted) {
                                   if (isLogin) {
                                     context.goNamed(Routes.root);
@@ -97,16 +100,15 @@ class _LoginPageState extends State<LoginPage> {
                                     padding: EdgeInsets.all(4.0),
                                     child: CircularProgressIndicator(),
                                   )
-                                : const Text('Login'),
+                                : Text(content.textLogin),
                           )
                         ],
                       ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                        onPressed: () =>
-                            context.pushNamed(Routes.register),
-                        child: const Text("Register"))
+                        onPressed: () => context.pushNamed(Routes.register),
+                        child: Text(content.textRegister))
                   ],
                 ),
               ),

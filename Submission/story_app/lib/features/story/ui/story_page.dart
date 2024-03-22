@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/features/story/widgets/card_story.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/result_state.dart';
 import 'package:story_app/widgets/error_page.dart';
 import 'package:story_app/widgets/loading_page.dart';
@@ -13,6 +14,8 @@ class StoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+
     return Consumer<StoryProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
@@ -21,8 +24,8 @@ class StoryPage extends StatelessWidget {
           return NestedScrollView(
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, isScrolled) => [
-              const SliverAppBar(
-                title: Text('My Stories'),
+              SliverAppBar(
+                title: Text(content.titleAppBarRoot),
                 floating: true,
               )
             ],
@@ -57,7 +60,7 @@ class StoryPage extends StatelessWidget {
         } else if (provider.state == ResultState.error) {
           return ErrorPage(error: "Error -> ${provider.message}");
         } else {
-          return const ErrorPage(error: 'Unknown Error');
+          return ErrorPage(error: content.unknownError);
         }
       },
     );

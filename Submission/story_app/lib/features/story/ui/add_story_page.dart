@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
 class AddStoryPage extends StatefulWidget {
@@ -23,9 +24,11 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Story'),
+        title: Text(content.titleAppBarAdd),
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: text.isNotEmpty
@@ -56,9 +59,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
               child: TextField(
                 controller: controller,
                 maxLines: 3,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Description",
+                  labelText: content.labelTextDesc,
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -74,11 +77,11 @@ class _AddStoryPageState extends State<AddStoryPage> {
               children: [
                 ElevatedButton(
                   onPressed: _onGallery,
-                  child: const Text('Gallery'),
+                  child: Text(content.btnGallery),
                 ),
                 ElevatedButton(
                   onPressed: _onCamera,
-                  child: const Text('Camera'),
+                  child: Text(content.btnCamera),
                 ),
               ],
             ),

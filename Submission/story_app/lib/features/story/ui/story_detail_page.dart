@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/date_time_extension.dart';
 import 'package:story_app/utils/result_state.dart';
 import 'package:story_app/widgets/error_page.dart';
@@ -19,6 +20,8 @@ class StoryDetailPage extends StatefulWidget {
 class _StoryDetailPageState extends State<StoryDetailPage> {
   @override
   Widget build(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+
     return Consumer<StoryProvider>(
       builder: (context, provider, child) {
         if (provider.state == ResultState.loading) {
@@ -28,11 +31,11 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
           final name = provider.storyDetailResult.story.name;
           final description = provider.storyDetailResult.story.description;
           final createdAt =
-              provider.storyDetailResult.story.createdAt.toIndFormat();
+              provider.storyDetailResult.story.createdAt;
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Detail'),
+              title: Text(content.titleAppBarDetails),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +65,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        createdAt,
+                        content.createdAt(createdAt),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -76,7 +79,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
         } else if (provider.state == ResultState.error) {
           return ErrorPage(error: "Error -> ${provider.message}");
         } else {
-          return const ErrorPage(error: 'Unknown Error');
+          return ErrorPage(error: content.unknownError);
         }
       },
     );

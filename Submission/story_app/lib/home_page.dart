@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app/common/constants.dart';
+import 'package:story_app/localization/localization.dart';
 class HomePage extends StatefulWidget {
   final Widget child;
 
@@ -17,30 +18,33 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex(context),
-        destinations: _bottomNavBarItems,
+        destinations: _bottomNavBarItems(context),
         onDestinationSelected: onTap,
       ),
       body: widget.child,
     );
   }
 
-  final List<NavigationDestination> _bottomNavBarItems = [
-    const NavigationDestination(
-      icon: Icon(Icons.home_outlined),
-      selectedIcon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    const NavigationDestination(
-      icon: Icon(Icons.add_outlined),
-      selectedIcon: Icon(Icons.add),
-      label: 'Add',
-    ),
-    const NavigationDestination(
-      icon: Icon(Icons.settings_outlined),
-      selectedIcon: Icon(Icons.settings),
-      label: 'Settings',
-    ),
-  ];
+  List<NavigationDestination> _bottomNavBarItems(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+    return [
+      NavigationDestination(
+        icon: const Icon(Icons.home_outlined),
+        selectedIcon: const Icon(Icons.home),
+        label: content.navbarNameHome,
+      ),
+      NavigationDestination(
+        icon: const Icon(Icons.add_outlined),
+        selectedIcon: const Icon(Icons.add),
+        label: content.navbarNameAdd,
+      ),
+      NavigationDestination(
+        icon: const Icon(Icons.settings_outlined),
+        selectedIcon: const Icon(Icons.settings),
+        label: content.navbarNameSettings,
+      ),
+    ];
+  }
 
   int _currentIndex(BuildContext context) {
     final route = GoRouterState.of(context);

@@ -6,12 +6,15 @@ class SettingsProvider extends ChangeNotifier {
 
   SettingsProvider({required this.localDataSource});
 
+  bool _isDark = false;
+  Locale? _locale;
+  Locale? get locale => _locale;
+
   ThemeMode get themeMode => _isDark ? ThemeMode.dark : ThemeMode.light;
 
-  bool _isDark = false;
   bool get isDark => _isDark;
 
-  toggleTheme(bool value) {
+  void toggleTheme(bool value) {
     localDataSource.setDarkTheme(value);
     getTheme();
   }
@@ -19,5 +22,17 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> getTheme() async {
     _isDark = await localDataSource.getDarkTheme();
     notifyListeners();
+  }
+
+  void setLocale(Locale locale) async {
+    _locale = locale;
+    await localDataSource.setLanguage(locale.languageCode);
+    notifyListeners();
+  }
+
+  Future<Locale> getLocale() async {
+    final code = await localDataSource.getLanguage();
+    notifyListeners();
+    return _locale = Locale(code);
   }
 }

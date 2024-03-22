@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/authentication/data/model/register.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
+import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -22,6 +23,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final content = AppLocalizations.of(context)!;
+
     return Consumer<AuthProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -44,13 +47,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your Name.';
+                            return content.errorValidateName;
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Name",
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: content.textName,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -58,23 +61,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: emailController,
                         validator: (value) => EmailValidator.validate(value!)
                             ? null
-                            : "Please enter a Valid Email",
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Email",
+                            : content.errorValidateEmail,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: content.textEmail,
                         ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Password",
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: content.textPassword,
                         ),
                         validator: (value) {
                           if (value == null || value.length < 8) {
-                            return 'Minimal character length is 8';
+                            return content.errorValidatePass;
                           }
                           return null;
                         },
@@ -107,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             }
                           } else {
-                            showSnackbar(context, 'Please Check Again');
+                            showSnackbar(context, content.errorValidateForm);
                           }
                         },
                         child: provider.isLoading
@@ -115,14 +118,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                 padding: EdgeInsets.all(4.0),
                                 child: CircularProgressIndicator(),
                               )
-                            : const Text('Register'),
+                            : Text(content.textRegister),
                       )
                     ],
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () => context.goNamed(Routes.login),
-                  child: const Text("Login"),
+                  child: Text(content.textLogin),
                 )
               ],
             ),
