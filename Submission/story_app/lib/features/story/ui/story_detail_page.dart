@@ -39,7 +39,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
               children: [
                 Image.network(
                   photoUrl,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.contain,
                   width: 100.w,
                   height: 480,
                 ),

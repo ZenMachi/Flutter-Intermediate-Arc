@@ -60,8 +60,8 @@ class LoginPage extends StatelessWidget {
                               labelText: "Password",
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your password.';
+                              if (value == null || value.length < 8) {
+                                return 'Minimal character length is 8';
                               }
                               return null;
                             },
@@ -103,7 +103,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 16),
                     ElevatedButton(
                         onPressed: () =>
-                            context.pushNamed(Routes.registerNamedPage),
+                            context.pushNamed(Routes.register),
                         child: Text("Register"))
                   ],
                 ),

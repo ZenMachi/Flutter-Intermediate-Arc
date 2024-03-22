@@ -95,7 +95,7 @@ class RegisterPage extends StatelessWidget {
                                     context, provider.registerResponse.message);
                                 Future.delayed(
                                   Duration(seconds: 1),
-                                  () => context.goNamed(Routes.loginNamedPage),
+                                  () => context.goNamed(Routes.login),
                                 );
                               } else {
                                 showSnackbar(context, provider.message);
@@ -116,7 +116,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => context.goNamed(Routes.loginNamedPage),
+                  onPressed: () => context.goNamed(Routes.login),
                   child: Text("Login"),
                 )
               ],

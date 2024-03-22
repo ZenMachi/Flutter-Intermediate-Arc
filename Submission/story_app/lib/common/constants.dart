@@ -1,11 +1,11 @@
 
 class Routes {
   static const root = "/";
-  static const storyDetailsNamedPage = "details";
-  static const addStoryNamedPage = "add";
-  static const settingsNamedPage = "settings";
-  static const loginNamedPage = "/login";
-  static const registerNamedPage = "/register";
+  static const storyDetails = "details";
+  static const addStory = "add";
+  static const settings = "settings";
+  static const login = "/login";
+  static const register = "/register";
 }
 
 class ApiLinks {

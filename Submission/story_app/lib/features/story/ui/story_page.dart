@@ -26,29 +26,30 @@ class StoryPage extends StatelessWidget {
                 floating: true,
               )
             ],
-            body: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              separatorBuilder: (context, index) => SizedBox(height: 12),
-              itemCount: provider.storiesResult.listStory.length,
-              itemBuilder: (context, index) {
-                final id = provider.storiesResult.listStory[index].id;
-                final params = {"id": id};
+            body: SafeArea(
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                separatorBuilder: (context, index) => SizedBox(height: 12),
+                itemCount: provider.storiesResult.listStory.length,
+                itemBuilder: (context, index) {
+                  final id = provider.storiesResult.listStory[index].id;
+                  final params = {"id": id};
 
-                return CardStory(
-                  onTap: () {
-                    Provider.of<StoryProvider>(context, listen: false)
-                        .fetchDetailStory(id);
-                    context.goNamed(
-                      Routes.storyDetailsNamedPage,
-                      pathParameters: params,
-                    );
-                  },
-                  name: provider.storiesResult.listStory[index].name,
-                  description:
-                      provider.storiesResult.listStory[index].description,
-                  imgUrl: provider.storiesResult.listStory[index].photoUrl,
-                );
-              },
+                  return CardStory(
+                    onTap: () {
+                      provider.fetchDetailStory(id);
+                      context.pushNamed(
+                        Routes.storyDetails,
+                        pathParameters: params,
+                      );
+                    },
+                    name: provider.storiesResult.listStory[index].name,
+                    description:
+                        provider.storiesResult.listStory[index].description,
+                    imgUrl: provider.storiesResult.listStory[index].photoUrl,
+                  );
+                },
+              ),
             ),
           );
         } else if (provider.state == ResultState.noData) {

@@ -9,6 +9,8 @@ import 'package:story_app/features/authentication/data/remote/auth_remote_data_s
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
 import 'package:story_app/features/authentication/ui/login_page.dart';
 import 'package:story_app/features/authentication/ui/register_page.dart';
+import 'package:story_app/features/settings/data/local/settings_local_data_source.dart';
+import 'package:story_app/features/settings/provider/settings_provider.dart';
 import 'package:story_app/features/story/data/remote/story_remote_data_source.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/home_page.dart';
@@ -31,22 +33,27 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late AuthProvider authProvider;
   late StoryProvider storyProvider;
+  late SettingsProvider settingsProvider;
 
   @override
   void initState() {
     super.initState();
     final client = Client();
-    final localDataSource = AuthLocalDataSource();
+    final authLocalDataSource = AuthLocalDataSource();
+    final settingsLocalDataSource = SettingsLocalDataSource();
 
     authProvider = AuthProvider(
       apiService: AuthRemoteDataSource(client),
-      localDataSource: localDataSource,
+      localDataSource: authLocalDataSource,
     );
     storyProvider = StoryProvider(
       apiService: StoryRemoteDataSource(
         client,
-        localDataSource,
+        authLocalDataSource,
       ),
+    );
+    settingsProvider = SettingsProvider(
+      localDataSource: settingsLocalDataSource,
     );
   }
 
@@ -61,25 +68,32 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider(
               create: (context) => authProvider,
             ),
+            ChangeNotifierProvider(
+              create: (context) => settingsProvider..getTheme(),
+            ),
           ],
-          child: MaterialApp.router(
-            routeInformationProvider: AppRouter.router.routeInformationProvider,
-            routeInformationParser: AppRouter.router.routeInformationParser,
-            routerDelegate: AppRouter.router.routerDelegate,
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            themeMode: ThemeMode.system,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
-              useMaterial3: true,
-            ),
-            darkTheme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.lightGreen,
-                brightness: Brightness.dark,
-              ),
-              useMaterial3: true,
-            ),
+          child: Consumer<SettingsProvider>(
+            builder: (context, provider, child) {
+              return MaterialApp.router(
+                routeInformationProvider: AppRouter.router.routeInformationProvider,
+                routeInformationParser: AppRouter.router.routeInformationParser,
+                routerDelegate: AppRouter.router.routerDelegate,
+                debugShowCheckedModeBanner: false,
+                title: 'Flutter Demo',
+                themeMode: provider.themeMode,
+                theme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+                  useMaterial3: true,
+                ),
+                darkTheme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: Colors.lightGreen,
+                    brightness: Brightness.dark,
+                  ),
+                  useMaterial3: true,
+                ),
+              );
+            }
           ),
         );
       });

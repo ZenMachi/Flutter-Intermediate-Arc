@@ -4,6 +4,8 @@ import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
 import 'package:story_app/features/authentication/ui/login_page.dart';
 import 'package:story_app/features/authentication/ui/register_page.dart';
+import 'package:story_app/features/settings/ui/settings_page.dart';
+import 'package:story_app/features/story/ui/add_story_page.dart';
 import 'package:story_app/features/story/ui/story_detail_page.dart';
 import 'package:story_app/features/story/ui/story_page.dart';
 import 'package:story_app/home_page.dart';
@@ -21,14 +23,14 @@ class AppRouter {
       final isLoggedIn = await prefs.isLoggedIn();
       final user = await prefs.getUser();
       final hasToken = user?.token != null;
-      final isInLogin = state.matchedLocation == 'login';
+      final isInLogin = state.matchedLocation == Routes.login;
       final isInRoot = state.matchedLocation == Routes.root;
-      final toRegister = state.path == Routes.registerNamedPage;
+      final toRegister = state.path == Routes.register;
 
       if (!isLoggedIn && !hasToken && isInRoot) {
-        return Routes.loginNamedPage;
+        return Routes.login;
       } else if (isInLogin && toRegister) {
-        return Routes.registerNamedPage;
+        return Routes.register;
       } else if (isLoggedIn && isInLogin && hasToken) {
         return Routes.root;
       } else {
@@ -45,28 +47,43 @@ class AppRouter {
           GoRoute(
             name: Routes.root,
             path: Routes.root,
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: StoryPage()),
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: StoryPage(),
+            ),
             routes: [
               GoRoute(
-                name: Routes.storyDetailsNamedPage,
-                path: "${Routes.storyDetailsNamedPage}/:id",
+                name: Routes.storyDetails,
+                path: "${Routes.storyDetails}/:id",
                 pageBuilder: (context, state) => NoTransitionPage(
                   child: StoryDetailPage(id: state.pathParameters["id"]!),
                 ),
-              )
+              ),
+              GoRoute(
+                name: Routes.addStory,
+                path: Routes.addStory,
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AddStoryPage(),
+                ),
+              ),
+              GoRoute(
+                name: Routes.settings,
+                path: Routes.settings,
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: SettingsPage(),
+                ),
+              ),
             ],
           ),
         ],
       ),
       GoRoute(
-        name: Routes.loginNamedPage,
-        path: Routes.loginNamedPage,
+        name: Routes.login,
+        path: Routes.login,
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
-        name: Routes.registerNamedPage,
-        path: Routes.registerNamedPage,
+        name: Routes.register,
+        path: Routes.register,
         builder: (context, state) => const RegisterPage(),
       ),
     ],
