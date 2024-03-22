@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +25,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Story'),
+        title: const Text('Add Story'),
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: text.isNotEmpty
@@ -44,14 +43,14 @@ class _AddStoryPageState extends State<AddStoryPage> {
                 width: 100.w,
                 height: 40.h,
                 child: context.watch<StoryProvider>().imagePath == null
-                    ? Center(
+                    ? const Center(
                         child: Icon(
                           Icons.image_rounded,
                           size: 128,
                         ),
                       )
                     : _showImage()),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             SizedBox(
               width: 80.w,
               child: TextField(
@@ -68,18 +67,18 @@ class _AddStoryPageState extends State<AddStoryPage> {
                 },
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
               children: [
                 ElevatedButton(
                   onPressed: _onGallery,
-                  child: Text('Gallery'),
+                  child: const Text('Gallery'),
                 ),
                 ElevatedButton(
                   onPressed: _onCamera,
-                  child: Text('Camera'),
+                  child: const Text('Camera'),
                 ),
               ],
             ),
@@ -87,6 +86,12 @@ class _AddStoryPageState extends State<AddStoryPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   void _onGallery() async {

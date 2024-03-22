@@ -3,22 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
 import 'package:story_app/features/authentication/data/model/login.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
-import 'package:story_app/utils/result_state.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     return Consumer<AuthProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -29,7 +31,7 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.account_box,
                       size: 256,
                     ),
@@ -49,7 +51,7 @@ class LoginPage extends StatelessWidget {
                               labelText: "Email",
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           TextFormField(
@@ -66,7 +68,7 @@ class LoginPage extends StatelessWidget {
                               return null;
                             },
                           ),
-                          SizedBox(height: 8.0),
+                          const SizedBox(height: 8.0),
                           ElevatedButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
@@ -91,20 +93,20 @@ class LoginPage extends StatelessWidget {
                               }
                             },
                             child: provider.isLoading
-                                ? Padding(
-                                    padding: const EdgeInsets.all(4.0),
+                                ? const Padding(
+                                    padding: EdgeInsets.all(4.0),
                                     child: CircularProgressIndicator(),
                                   )
-                                : Text('Login'),
+                                : const Text('Login'),
                           )
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ElevatedButton(
                         onPressed: () =>
                             context.pushNamed(Routes.register),
-                        child: Text("Register"))
+                        child: const Text("Register"))
                   ],
                 ),
               ),
@@ -113,5 +115,12 @@ class LoginPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
   }
 }

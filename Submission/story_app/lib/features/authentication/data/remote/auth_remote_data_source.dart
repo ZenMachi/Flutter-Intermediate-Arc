@@ -6,7 +6,6 @@ import 'package:story_app/features/authentication/data/model/login.dart';
 import 'package:story_app/features/authentication/data/model/login_response.dart';
 import 'package:story_app/features/authentication/data/model/register.dart';
 import 'package:story_app/features/authentication/data/model/register_response.dart';
-import 'package:story_app/utils/exception_extension.dart';
 
 class AuthRemoteDataSource {
   final Client client;

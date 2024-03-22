@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
-import 'package:story_app/features/authentication/provider/auth_provider.dart';
 import 'package:story_app/features/settings/provider/settings_provider.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -13,7 +12,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         automaticallyImplyLeading: false,
       ),
       body: Column(

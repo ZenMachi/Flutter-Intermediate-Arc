@@ -4,19 +4,24 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/authentication/data/model/register.dart';
-import 'package:story_app/features/authentication/data/model/register_response.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     return Consumer<AuthProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -26,7 +31,7 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
+                const Icon(
                   Icons.account_box,
                   size: 256,
                 ),
@@ -48,7 +53,7 @@ class RegisterPage extends StatelessWidget {
                           labelText: "Name",
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       TextFormField(
                         controller: emailController,
                         validator: (value) => EmailValidator.validate(value!)
@@ -59,7 +64,7 @@ class RegisterPage extends StatelessWidget {
                           labelText: "Email",
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       TextFormField(
                         controller: passwordController,
                         obscureText: true,
@@ -74,7 +79,7 @@ class RegisterPage extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
@@ -94,7 +99,7 @@ class RegisterPage extends StatelessWidget {
                                 showSnackbar(
                                     context, provider.registerResponse.message);
                                 Future.delayed(
-                                  Duration(seconds: 1),
+                                  const Duration(seconds: 1),
                                   () => context.goNamed(Routes.login),
                                 );
                               } else {
@@ -106,18 +111,18 @@ class RegisterPage extends StatelessWidget {
                           }
                         },
                         child: provider.isLoading
-                            ? Padding(
-                                padding: const EdgeInsets.all(4.0),
+                            ? const Padding(
+                                padding: EdgeInsets.all(4.0),
                                 child: CircularProgressIndicator(),
                               )
-                            : Text('Register'),
+                            : const Text('Register'),
                       )
                     ],
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () => context.goNamed(Routes.login),
-                  child: Text("Login"),
+                  child: const Text("Login"),
                 )
               ],
             ),
@@ -125,5 +130,13 @@ class RegisterPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    nameController.dispose();
+    passwordController.dispose();
   }
 }

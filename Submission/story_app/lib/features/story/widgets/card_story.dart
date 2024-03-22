@@ -31,7 +31,7 @@ class CardStory extends StatelessWidget {
                     Icons.account_circle_rounded,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(name),
@@ -45,11 +45,11 @@ class CardStory extends StatelessWidget {
               height: 256,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 8, bottom: 8),
+              padding: const EdgeInsets.only(left: 8, bottom: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(

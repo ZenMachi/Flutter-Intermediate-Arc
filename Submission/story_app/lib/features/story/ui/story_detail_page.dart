@@ -32,7 +32,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Detail'),
+              title: const Text('Detail'),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,11 +44,11 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                   height: 480,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         name,
                         style: Theme.of(context)
@@ -60,7 +60,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                         description,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         createdAt,
                         style: Theme.of(context).textTheme.bodySmall,

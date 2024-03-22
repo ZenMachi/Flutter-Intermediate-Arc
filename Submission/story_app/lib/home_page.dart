@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/ui/login_page.dart';
-import 'package:story_app/features/authentication/ui/register_page.dart';
-import 'package:story_app/features/story/ui/story_page.dart';
-import 'package:story_app/routes/app_routes.dart';
-
 class HomePage extends StatefulWidget {
   final Widget child;
 
@@ -16,7 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _bottomNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +19,6 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _currentIndex(context),
         destinations: _bottomNavBarItems,
         onDestinationSelected: onTap,
-        // showSelectedLabels: false,
-        // showUnselectedLabels: false,
       ),
       body: widget.child,
     );

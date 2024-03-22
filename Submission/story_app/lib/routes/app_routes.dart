@@ -47,7 +47,7 @@ class AppRouter {
           GoRoute(
             name: Routes.root,
             path: Routes.root,
-            pageBuilder: (context, state) => NoTransitionPage(
+            pageBuilder: (context, state) => const NoTransitionPage(
               child: StoryPage(),
             ),
             routes: [
@@ -61,14 +61,14 @@ class AppRouter {
               GoRoute(
                 name: Routes.addStory,
                 path: Routes.addStory,
-                pageBuilder: (context, state) => NoTransitionPage(
+                pageBuilder: (context, state) => const NoTransitionPage(
                   child: AddStoryPage(),
                 ),
               ),
               GoRoute(
                 name: Routes.settings,
                 path: Routes.settings,
-                pageBuilder: (context, state) => NoTransitionPage(
+                pageBuilder: (context, state) => const NoTransitionPage(
                   child: SettingsPage(),
                 ),
               ),

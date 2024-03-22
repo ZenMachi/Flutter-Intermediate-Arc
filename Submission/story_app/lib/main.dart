@@ -7,13 +7,10 @@ import 'package:story_app/common/url_strategy.dart';
 import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
 import 'package:story_app/features/authentication/data/remote/auth_remote_data_source.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
-import 'package:story_app/features/authentication/ui/login_page.dart';
-import 'package:story_app/features/authentication/ui/register_page.dart';
 import 'package:story_app/features/settings/data/local/settings_local_data_source.dart';
 import 'package:story_app/features/settings/provider/settings_provider.dart';
 import 'package:story_app/features/story/data/remote/story_remote_data_source.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
-import 'package:story_app/home_page.dart';
 import 'package:story_app/routes/app_routes.dart';
 
 void main() {
