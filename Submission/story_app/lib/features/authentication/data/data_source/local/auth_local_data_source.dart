@@ -41,6 +41,4 @@ class AuthLocalDataSource {
     }
     return user;
   }
-
-
 }

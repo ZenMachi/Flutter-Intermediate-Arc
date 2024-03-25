@@ -99,8 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 await provider.registerUser(credentials);
                             if (context.mounted) {
                               if (!isRegister) {
-                                showSnackbar(
-                                    context, provider.message);
+                                showSnackbar(context, provider.message);
                                 Future.delayed(
                                   const Duration(seconds: 1),
                                   () => context.goNamed(Routes.login),

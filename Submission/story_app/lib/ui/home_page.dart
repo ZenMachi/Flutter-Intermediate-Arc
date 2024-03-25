@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/localization/localization.dart';
+
 class HomePage extends StatefulWidget {
   final Widget child;
 
@@ -12,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

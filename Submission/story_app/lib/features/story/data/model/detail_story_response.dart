@@ -1,5 +1,3 @@
-
-
 import 'package:story_app/features/story/data/model/story.dart';
 
 class DetailStoryResponse {
@@ -13,18 +11,16 @@ class DetailStoryResponse {
     required this.story,
   });
 
-
-  factory DetailStoryResponse.fromJson(Map<String, dynamic> json) => DetailStoryResponse(
-    error: json["error"],
-    message: json["message"],
-    story: Story.fromJson(json["story"]),
-  );
+  factory DetailStoryResponse.fromJson(Map<String, dynamic> json) =>
+      DetailStoryResponse(
+        error: json["error"],
+        message: json["message"],
+        story: Story.fromJson(json["story"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "error": error,
-    "message": message,
-    "story": story.toJson(),
-  };
+        "error": error,
+        "message": message,
+        "story": story.toJson(),
+      };
 }
-
-

@@ -1,4 +1,3 @@
-
 class Routes {
   static const root = "/";
   static const storyDetails = "details";

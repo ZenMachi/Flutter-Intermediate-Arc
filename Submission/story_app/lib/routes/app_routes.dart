@@ -24,7 +24,8 @@ class AppRouter {
     redirect: (context, state) async {
       final local = AuthLocalDataSource();
       final remote = AuthRemoteDataSource(Client());
-      final repo = AuthRepository(remoteDataSource: remote, localDataSource: local);
+      final repo =
+          AuthRepository(remoteDataSource: remote, localDataSource: local);
       final checkLogin = await repo.checkLogin();
       final isInLogin = state.matchedLocation == Routes.login;
       final isInRoot = state.matchedLocation == Routes.root;

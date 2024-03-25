@@ -15,7 +15,6 @@ class AuthRemoteDataSource {
   AuthRemoteDataSource(this.client);
 
   Future<LoginResponse> postLoginInfo(LoginInfo loginInfo) async {
-
     final body = loginInfo.toJson();
     final headers = {
       HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
