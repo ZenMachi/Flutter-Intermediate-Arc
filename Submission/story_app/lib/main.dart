@@ -4,12 +4,14 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/common/url_strategy.dart';
-import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
-import 'package:story_app/features/authentication/data/remote/auth_remote_data_source.dart';
+import 'package:story_app/features/authentication/data/auth_repository.dart';
+import 'package:story_app/features/authentication/data/data_source/local/auth_local_data_source.dart';
+import 'package:story_app/features/authentication/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
-import 'package:story_app/features/settings/data/local/settings_local_data_source.dart';
+import 'package:story_app/features/settings/data/data_source/local/settings_local_data_source.dart';
 import 'package:story_app/features/settings/provider/settings_provider.dart';
-import 'package:story_app/features/story/data/remote/story_remote_data_source.dart';
+import 'package:story_app/features/story/data/data_source/remote/story_remote_data_source.dart';
+import 'package:story_app/features/story/data/story_repository.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/localization/localization.dart';
 import 'package:story_app/routes/app_routes.dart';
@@ -39,20 +41,18 @@ class _MyAppState extends State<MyApp> {
     final client = Client();
     final authLocalDataSource = AuthLocalDataSource();
     final settingsLocalDataSource = SettingsLocalDataSource();
+    final authRepo = AuthRepository(
+        remoteDataSource: AuthRemoteDataSource(client),
+        localDataSource: authLocalDataSource);
+    final storyRepo = StoryRepository(
+      authRepository: authRepo,
+      remoteDataSource: StoryRemoteDataSource(client),
+    );
 
-    authProvider = AuthProvider(
-      apiService: AuthRemoteDataSource(client),
-      localDataSource: authLocalDataSource,
-    );
-    storyProvider = StoryProvider(
-      apiService: StoryRemoteDataSource(
-        client,
-        authLocalDataSource,
-      ),
-    );
-    settingsProvider = SettingsProvider(
-      localDataSource: settingsLocalDataSource,
-    );
+    authProvider = AuthProvider(repository: authRepo);
+    storyProvider = StoryProvider(repository: storyRepo);
+    settingsProvider =
+        SettingsProvider(localDataSource: settingsLocalDataSource);
   }
 
   @override
@@ -67,7 +67,9 @@ class _MyAppState extends State<MyApp> {
               create: (context) => authProvider,
             ),
             ChangeNotifierProvider(
-              create: (context) => settingsProvider..getTheme()..getLocale(),
+              create: (context) => settingsProvider
+                ..getTheme()
+                ..getLocale(),
             ),
           ],
           child: Consumer<SettingsProvider>(

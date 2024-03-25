@@ -1,4 +1,5 @@
-import 'package:story_app/features/story/data/remote/model/story.dart';
+
+import 'package:story_app/features/story/data/model/story.dart';
 
 class StoriesResponse {
   bool error;

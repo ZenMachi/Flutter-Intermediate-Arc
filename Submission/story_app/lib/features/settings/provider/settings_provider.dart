@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:story_app/features/settings/data/local/settings_local_data_source.dart';
+import 'package:story_app/features/settings/data/data_source/local/settings_local_data_source.dart';
 
 class SettingsProvider extends ChangeNotifier {
   SettingsLocalDataSource localDataSource;

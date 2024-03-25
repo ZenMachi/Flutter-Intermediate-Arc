@@ -3,12 +3,12 @@ import 'package:story_app/features/authentication/data/model/user.dart';
 class LoginResponse {
   bool error;
   String message;
-  User loginResult;
+  User? loginResult;
 
   LoginResponse({
     required this.error,
     required this.message,
-    required this.loginResult,
+    this.loginResult,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
@@ -20,7 +20,7 @@ class LoginResponse {
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    "loginResult": loginResult.toJson(),
+    "loginResult": loginResult?.toJson(),
   };
 }
 

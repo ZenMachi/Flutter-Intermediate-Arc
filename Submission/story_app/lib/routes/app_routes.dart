@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
+import 'package:story_app/features/authentication/data/auth_repository.dart';
+import 'package:story_app/features/authentication/data/data_source/local/auth_local_data_source.dart';
+import 'package:story_app/features/authentication/data/data_source/remote/auth_remote_data_source.dart';
 import 'package:story_app/features/authentication/ui/login_page.dart';
 import 'package:story_app/features/authentication/ui/register_page.dart';
 import 'package:story_app/features/settings/ui/settings_page.dart';
 import 'package:story_app/features/story/ui/add_story_page.dart';
 import 'package:story_app/features/story/ui/story_detail_page.dart';
 import 'package:story_app/features/story/ui/story_page.dart';
-import 'package:story_app/home_page.dart';
+import 'package:story_app/ui/home_page.dart';
 
 class AppRouter {
   static final _rootNavigationKey = GlobalKey<NavigatorState>();
@@ -19,19 +22,19 @@ class AppRouter {
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigationKey,
     redirect: (context, state) async {
-      final prefs = AuthLocalDataSource();
-      final isLoggedIn = await prefs.isLoggedIn();
-      final user = await prefs.getUser();
-      final hasToken = user?.token != null;
+      final local = AuthLocalDataSource();
+      final remote = AuthRemoteDataSource(Client());
+      final repo = AuthRepository(remoteDataSource: remote, localDataSource: local);
+      final checkLogin = await repo.checkLogin();
       final isInLogin = state.matchedLocation == Routes.login;
       final isInRoot = state.matchedLocation == Routes.root;
       final toRegister = state.path == Routes.register;
 
-      if (!isLoggedIn && !hasToken && isInRoot) {
+      if (!checkLogin && isInRoot) {
         return Routes.login;
       } else if (isInLogin && toRegister) {
         return Routes.register;
-      } else if (isLoggedIn && isInLogin && hasToken) {
+      } else if (checkLogin && isInLogin) {
         return Routes.root;
       } else {
         return null;

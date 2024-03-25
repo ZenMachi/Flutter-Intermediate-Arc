@@ -4,20 +4,17 @@ import 'dart:typed_data';
 import 'package:http/http.dart'
     show Client, MultipartFile, MultipartRequest, StreamedResponse;
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
-import 'package:story_app/features/story/data/remote/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/remote/model/stories_response.dart';
-import 'package:story_app/features/story/data/remote/model/upload_response.dart';
+import 'package:story_app/features/story/data/model/detail_story_response.dart';
+import 'package:story_app/features/story/data/model/stories_response.dart';
+import 'package:story_app/features/story/data/model/upload_response.dart';
+import 'package:story_app/utils/exceptions/exceptions.dart';
 
 class StoryRemoteDataSource {
   final Client client;
-  final AuthLocalDataSource localDataSource;
 
-  StoryRemoteDataSource(this.client, this.localDataSource);
+  StoryRemoteDataSource(this.client);
 
-  Future<StoriesResponse> getStories() async {
-    final user = await localDataSource.getUser();
-    final token = user?.token;
+  Future<StoriesResponse> getStories(String token) async {
     final queryParams = {
       "page": "1",
       "size": "5",
@@ -33,14 +30,18 @@ class StoryRemoteDataSource {
 
     if (response.statusCode == 200) {
       return StoriesResponse.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 400) {
+      final message = json.decode(response.body);
+      throw BadRequestException(message['message']);
+    } else if (response.statusCode == 401) {
+      final message = json.decode(response.body);
+      throw UnauthorizedException(message['message']);
     } else {
-      throw Exception('Failed to load Stories');
+      throw Exception('Unhandled Exception');
     }
   }
 
-  Future<DetailStoryResponse> getDetailStory(String id) async {
-    final user = await localDataSource.getUser();
-    final token = user?.token;
+  Future<DetailStoryResponse> getDetailStory(String id, String token) async {
     final headers = {HttpHeaders.authorizationHeader: "Bearer $token"};
     final uri = Uri.https(
       ApiLinks.baseUrl,
@@ -50,18 +51,23 @@ class StoryRemoteDataSource {
 
     if (response.statusCode == 200) {
       return DetailStoryResponse.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 400) {
+      final message = json.decode(response.body);
+      throw BadRequestException(message['message']);
+    } else if (response.statusCode == 401) {
+      final message = json.decode(response.body);
+      throw UnauthorizedException(message['message']);
     } else {
-      throw Exception('Failed to load Detail Story');
+      throw Exception('Unhandled Exception');
     }
   }
 
-  Future<UploadResponse> uploadStory(
+  Future<UploadResponse> postUploadStory(
     List<int> bytes,
     String fileName,
     String description,
+    String token,
   ) async {
-    final user = await localDataSource.getUser();
-    final token = user?.token;
     final headers = {
       HttpHeaders.contentTypeHeader: "multipart/form-data",
       HttpHeaders.authorizationHeader: "Bearer $token"
@@ -95,10 +101,15 @@ class StoryRemoteDataSource {
     if (statusCode == 201) {
       final UploadResponse uploadResponse =
           UploadResponse.fromJson(responseData);
-
       return uploadResponse;
+    } else if (statusCode == 400) {
+      final message = UploadResponse.fromJson(responseData);
+      throw BadRequestException(message.message);
+    } else if (statusCode == 401) {
+      final message = UploadResponse.fromJson(responseData);
+      throw UnauthorizedException(message.message);
     } else {
-      throw Exception("Upload file Error");
+      throw Exception("Unhandled Exception");
     }
   }
 }

@@ -8,6 +8,8 @@ import 'package:sizer/sizer.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/localization/localization.dart';
+import 'package:story_app/utils/compress_image.dart';
+import 'package:story_app/utils/result_state.dart';
 import 'package:story_app/utils/show_snackbar.dart';
 
 class AddStoryPage extends StatefulWidget {
@@ -31,14 +33,15 @@ class _AddStoryPageState extends State<AddStoryPage> {
         title: Text(content.titleAppBarAdd),
         automaticallyImplyLeading: false,
       ),
-      floatingActionButton: text.isNotEmpty
-          ? FloatingActionButton(
-              onPressed: () => _onUpload(text),
-              child: context.watch<StoryProvider>().isLoading
-                  ? const CircularProgressIndicator()
-                  : const Icon(Icons.upload),
-            )
-          : null,
+      floatingActionButton:
+          text.isNotEmpty && context.watch<StoryProvider>().imagePath != null
+              ? FloatingActionButton(
+                  onPressed: () => _onUpload(text),
+                  child: context.watch<StoryProvider>().isLoading
+                      ? const CircularProgressIndicator()
+                      : const Icon(Icons.upload),
+                )
+              : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -60,7 +63,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                 controller: controller,
                 maxLines: 3,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   labelText: content.labelTextDesc,
                 ),
                 onChanged: (value) {
@@ -144,7 +147,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
     final fileName = imageFile.name;
     final bytes = await imageFile.readAsBytes();
-    final newBytes = await provider.compressImage(bytes);
+    final newBytes = await compressImage(bytes);
 
     await provider.uploadStory(
       newBytes,
@@ -152,7 +155,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
       description,
     );
 
-    if (provider.uploadResult != null) {
+    if (provider.state == ResultState.success) {
       provider.setImageFile(null);
       provider.setImagePath(null);
       if (mounted) {

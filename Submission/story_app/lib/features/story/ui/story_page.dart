@@ -32,7 +32,8 @@ class StoryPage extends StatelessWidget {
             body: SafeArea(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                 itemCount: provider.storiesResult.listStory.length,
                 itemBuilder: (context, index) {
                   final id = provider.storiesResult.listStory[index].id;
@@ -41,7 +42,7 @@ class StoryPage extends StatelessWidget {
                   return CardStory(
                     onTap: () {
                       provider.fetchDetailStory(id);
-                      context.pushNamed(
+                      context.goNamed(
                         Routes.storyDetails,
                         pathParameters: params,
                       );

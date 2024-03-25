@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/local/auth_local_data_source.dart';
+import 'package:story_app/features/authentication/data/data_source/local/auth_local_data_source.dart';
 import 'package:story_app/features/settings/provider/settings_provider.dart';
 import 'package:story_app/localization/localization.dart';
 

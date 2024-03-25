@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ? null
                                     : content.errorValidateEmail,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
                               labelText: content.textEmail,
                             ),
                           ),
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
                               labelText: content.textPassword,
                             ),
                             validator: (value) {

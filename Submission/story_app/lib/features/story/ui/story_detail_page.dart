@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/localization/localization.dart';
-import 'package:story_app/utils/date_time_extension.dart';
 import 'package:story_app/utils/result_state.dart';
 import 'package:story_app/widgets/error_page.dart';
 import 'package:story_app/widgets/loading_page.dart';
@@ -30,8 +29,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
           final photoUrl = provider.storyDetailResult.story.photoUrl;
           final name = provider.storyDetailResult.story.name;
           final description = provider.storyDetailResult.story.description;
-          final createdAt =
-              provider.storyDetailResult.story.createdAt;
+          final createdAt = provider.storyDetailResult.story.createdAt;
 
           return Scaffold(
             appBar: AppBar(
