@@ -38,11 +38,13 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  photoUrl,
-                  fit: BoxFit.contain,
-                  width: 100.w,
-                  height: 480,
+                Flexible(
+                  child: Image.network(
+                    photoUrl,
+                    fit: BoxFit.contain,
+                    width: 100.w,
+                    height: 480,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -66,6 +68,7 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                         content.createdAt(createdAt),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                      SizedBox(height: 2.h,)
                     ],
                   ),
                 ),
