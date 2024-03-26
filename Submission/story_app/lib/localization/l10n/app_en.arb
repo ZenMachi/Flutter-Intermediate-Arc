@@ -1,0 +1,36 @@
+{
+  "titleAppBarRoot": "My Stories",
+  "titleAppBarAdd": "Add Story",
+  "titleAppBarSettings": "Settings",
+  "titleAppBarDetails": "Details",
+  "navbarNameHome": "Home",
+  "navbarNameAdd": "Add",
+  "navbarNameSettings": "Settings",
+  "createdAt": "{date}",
+  "@createdAt": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "labelTextDesc": "Description",
+  "btnGallery": "Gallery",
+  "btnCamera": "Camera",
+  "textDarkMode": "Dark Mode",
+  "textLogout": "Logout",
+  "textLogin" : "Login",
+  "textRegister" : "Register",
+  "textEmail" : "Email",
+  "textPassword" : "Password",
+  "textName" : "Name",
+  "textLanguage": "Language",
+  "errorValidateName": "Please enter Your name",
+  "errorValidatePass": "Minimal Character length is 8",
+  "errorValidateEmail": "Please Enter a Valid Email",
+  "errorValidateForm": "Please Check Again",
+  "languageID": "Indonesian",
+  "languageEN": "English",
+  "unknownError": "Unknown Error"
+}
