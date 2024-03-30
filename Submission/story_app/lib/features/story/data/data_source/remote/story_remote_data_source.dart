@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:http/http.dart'
     show Client, MultipartFile, MultipartRequest, StreamedResponse;
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
-import 'package:story_app/features/story/data/model/upload_response.dart';
+import 'package:story_app/features/story/data/model/detail/detail_story_response.dart';
+import 'package:story_app/features/story/data/model/stories/stories_response.dart';
+import 'package:story_app/features/story/data/model/upload/upload_response.dart';
 import 'package:story_app/utils/exceptions/exceptions.dart';
 
 class StoryRemoteDataSource {
@@ -100,13 +100,13 @@ class StoryRemoteDataSource {
 
     if (statusCode == 201) {
       final UploadResponse uploadResponse =
-          UploadResponse.fromJson(responseData);
+          UploadResponse.fromJsonString(responseData);
       return uploadResponse;
     } else if (statusCode == 400) {
-      final message = UploadResponse.fromJson(responseData);
+      final message = UploadResponse.fromJsonString(responseData);
       throw BadRequestException(message.message);
     } else if (statusCode == 401) {
-      final message = UploadResponse.fromJson(responseData);
+      final message = UploadResponse.fromJsonString(responseData);
       throw UnauthorizedException(message.message);
     } else {
       throw Exception("Unhandled Exception");

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:story_app/features/authentication/data/data_source/local/auth_local_data_source.dart';
 import 'package:story_app/features/authentication/data/data_source/remote/auth_remote_data_source.dart';
-import 'package:story_app/features/authentication/data/model/login.dart';
-import 'package:story_app/features/authentication/data/model/register.dart';
+import 'package:story_app/features/authentication/data/model/login/login_form.dart';
+import 'package:story_app/features/authentication/data/model/register/register.dart';
 import 'package:story_app/utils/exceptions/exceptions.dart';
 import 'package:story_app/utils/failures/failure.dart';
 
@@ -15,7 +15,7 @@ class AuthRepository {
   AuthRepository(
       {required this.remoteDataSource, required this.localDataSource});
 
-  Future<Either<Failure, bool>> loginUser(LoginInfo user) async {
+  Future<Either<Failure, bool>> loginUser(LoginForm user) async {
     try {
       final result = await remoteDataSource.postLoginInfo(user);
       if (result.error == false) {

@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:story_app/features/authentication/data/auth_repository.dart';
 import 'package:story_app/features/story/data/data_source/remote/story_remote_data_source.dart';
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
+import 'package:story_app/features/story/data/model/detail/detail_story_response.dart';
+import 'package:story_app/features/story/data/model/stories/stories_response.dart';
 import 'package:story_app/utils/exceptions/exceptions.dart';
 import 'package:story_app/utils/failures/failure.dart';
 

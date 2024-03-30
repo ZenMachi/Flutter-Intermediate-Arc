@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
-import 'package:story_app/features/story/data/model/upload_response.dart';
+import 'package:story_app/features/story/data/model/detail/detail_story_response.dart';
+import 'package:story_app/features/story/data/model/stories/stories_response.dart';
+import 'package:story_app/features/story/data/model/upload/upload_response.dart';
 import 'package:story_app/features/story/data/story_repository.dart';
 import 'package:story_app/utils/result_state.dart';
 

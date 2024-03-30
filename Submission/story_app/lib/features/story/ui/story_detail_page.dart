@@ -68,7 +68,9 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                         content.createdAt(createdAt),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      SizedBox(height: 2.h,)
+                      SizedBox(
+                        height: 2.h,
+                      )
                     ],
                   ),
                 ),

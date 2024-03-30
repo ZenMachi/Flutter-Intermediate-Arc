@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:story_app/features/authentication/data/model/user.dart';
+import 'package:story_app/features/authentication/data/model/login/user.dart';
 
 class AuthLocalDataSource {
   final String stateKey = "state";
@@ -22,7 +25,7 @@ class AuthLocalDataSource {
 
   Future<bool> saveUser(User user) async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.setString(userKey, user.toJsonString());
+    return preferences.setString(userKey, json.encode(user.toJson()));
   }
 
   Future<bool> deleteUser() async {
@@ -32,10 +35,10 @@ class AuthLocalDataSource {
 
   Future<User?> getUser() async {
     final preferences = await SharedPreferences.getInstance();
-    final json = preferences.getString(userKey) ?? "";
+    final jsonData = preferences.getString(userKey) ?? "";
     User? user;
     try {
-      user = User.fromJsonString(json);
+      user = User.fromJson(json.decode(jsonData));
     } catch (e) {
       user = null;
     }

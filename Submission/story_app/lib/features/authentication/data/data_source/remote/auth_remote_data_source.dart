@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' show Client;
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/model/login.dart';
-import 'package:story_app/features/authentication/data/model/login_response.dart';
-import 'package:story_app/features/authentication/data/model/register.dart';
-import 'package:story_app/features/authentication/data/model/register_response.dart';
+import 'package:story_app/features/authentication/data/model/login/login_form.dart';
+import 'package:story_app/features/authentication/data/model/login/login_response.dart';
+import 'package:story_app/features/authentication/data/model/register/register.dart';
+import 'package:story_app/features/authentication/data/model/register/register_response.dart';
 import 'package:story_app/utils/exceptions/exceptions.dart';
 
 class AuthRemoteDataSource {
@@ -14,7 +14,7 @@ class AuthRemoteDataSource {
 
   AuthRemoteDataSource(this.client);
 
-  Future<LoginResponse> postLoginInfo(LoginInfo loginInfo) async {
+  Future<LoginResponse> postLoginInfo(LoginForm loginInfo) async {
     final body = loginInfo.toJson();
     final headers = {
       HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
