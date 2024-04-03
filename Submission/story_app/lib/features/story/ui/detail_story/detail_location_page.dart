@@ -15,17 +15,33 @@ class DetailLocationPage extends StatefulWidget {
 
 class _DetailLocationPageState extends State<DetailLocationPage> {
   late GoogleMapController mapController;
-  final initLocation = const LatLng(-6.19801, 106.82883);
+  late LatLng location;
   final Set<Marker> markers = {};
   MapType selectedMapType = MapType.normal;
 
   @override
-  Widget build(BuildContext context) {
-    final location = LatLng(
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    location = LatLng(
       double.parse(widget.latString),
       double.parse(widget.lonString),
     );
+    markers.add(
+      Marker(
+        markerId: MarkerId("Location $location"),
+        position: location,
+        onTap: () {
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(location, 18),
+          );
+        },
+      ),
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Stack(
         children: [
@@ -33,7 +49,7 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
             markers: markers,
             mapType: selectedMapType,
             initialCameraPosition: CameraPosition(
-              target: initLocation,
+              target: location,
               zoom: 18,
             ),
             onMapCreated: (controller) {

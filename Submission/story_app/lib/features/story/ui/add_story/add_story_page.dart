@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import 'package:story_app/common/constants.dart';
 import 'package:story_app/features/story/data/model/state/upload_state.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
+import 'package:story_app/flavors/flavors.dart';
 import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/compress_image.dart';
 import 'package:story_app/utils/show_snackbar.dart';
@@ -30,38 +33,41 @@ class _AddStoryPageState extends State<AddStoryPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    storyProvider = Provider.of<StoryProvider>(context, listen: false);
-    _listenUploadState = listenUploadState;
-    storyProvider.addListener(_listenUploadState);
+    storyProvider = context.read<StoryProvider>();
+    // storyProvider.addListener(_listenUploadState);
   }
 
-  listenUploadState() {
-    storyProvider.uploadState.whenOrNull(
-      success: (value) {
-        storyProvider.setImageFile(null);
-        storyProvider.setImagePath(null);
-        if (mounted) {
-          showSnackbar(context, value);
-          storyProvider.fetchStories(true);
-          Future.delayed(Duration(milliseconds: 500), () {
-            context.goNamed(Routes.root);
-          });
-        }
-      },
-      error: (value) {
-        if (mounted) {
-          showSnackbar(context, value);
-          context.goNamed(Routes.root);
-        }
-      },
-    );
-
-    // if (storyProvider.uploadState == UploadState.success) {
-    //
-    // } else if (storyProvider.uploadState == UploadState.error) {
-    //
-    // }
-  }
+  // listenUploadState() {
+  //   storyProvider.uploadState.maybeWhen(
+  //     success: (value) {
+  //       storyProvider.setImageFile(null);
+  //       storyProvider.setImagePath(null);
+  //       // showSnackbar(context, "UploadSuccess");
+  //       // if (mounted) context.goNamed(Routes.root);
+  //       if (mounted) {
+  //         showSnackbar(context, "Upload Success");
+  //         context.goNamed(Routes.root);
+  //         // Future.delayed(Duration(milliseconds: 500), () {
+  //         //   context.goNamed(Routes.root);
+  //         // });
+  //       }
+  //     },
+  //     error: (value) {
+  //       if (mounted) {
+  //         showSnackbar(context, value);
+  //         // storyProvider.setImageFile(null);
+  //         storyProvider.setImagePath(null);
+  //         context.goNamed(Routes.root);
+  //       }
+  //     }, orElse: () => showSnackbar(context, "Meong"),
+  //   );
+  //
+  //   // if (storyProvider.uploadState == UploadState.success) {
+  //   //
+  //   // } else if (storyProvider.uploadState == UploadState.error) {
+  //   //
+  //   // }
+  // }
 
   @override
   void dispose() {
@@ -88,7 +94,10 @@ class _AddStoryPageState extends State<AddStoryPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
+          AnimatedOpacity(
+            opacity:
+                text.isNotEmpty && storyProvider.imagePath != null ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 500),
             child: text.isNotEmpty && storyProvider.imagePath != null
                 ? FloatingActionButton(
                     onPressed: () {
@@ -105,7 +114,11 @@ class _AddStoryPageState extends State<AddStoryPage> {
           ),
           FloatingActionButton(
             onPressed: () {
-              context.goNamed(Routes.addLocation);
+              if (F.appFlavor == Flavor.paid) {
+                context.goNamed(Routes.addLocation);
+              } else {
+                showSnackbar(context, "Only Paid Version");
+              }
             },
             child: const Icon(Icons.my_location),
           )
@@ -224,29 +237,29 @@ class _AddStoryPageState extends State<AddStoryPage> {
     final bytes = await imageFile.readAsBytes();
     final newBytes = await compressImage(bytes);
 
-    provider.uploadStory(
-      newBytes,
-      fileName,
-      description,
-    );
-    //     .then(
-    //       (value) =>
-    //       value.maybeWhen(
-    //         success: (value) {
-    //           provider.setImageFile(null);
-    //           provider.setImagePath(null);
-    //           if (mounted) {
-    //             context.read<StoryProvider>().fetchStories(true);
-    //             showSnackbar(context, value);
-    //             context.goNamed(Routes.root);
-    //           }
-    //         },
-    //         error: (value) {
-    //           if (mounted) showSnackbar(context, value);
-    //         },
-    //         orElse: () => null,
-    //       ),
-    // );
+    await provider
+        .uploadStory(
+          newBytes,
+          fileName,
+          description,
+        )
+        .then(
+          (value) => value.maybeWhen(
+            success: (value) {
+              provider.setImageFile(null);
+              provider.setImagePath(null);
+              if (mounted) {
+                storyProvider.fetchStories(true);
+                showSnackbar(context, value);
+                context.goNamed(Routes.root);
+              }
+            },
+            error: (value) {
+              if (mounted) showSnackbar(context, value);
+            },
+            orElse: () => null,
+          ),
+        );
 
     // final error =
     //     state.maybeWhen(error: (value) => value, orElse: () => "null");

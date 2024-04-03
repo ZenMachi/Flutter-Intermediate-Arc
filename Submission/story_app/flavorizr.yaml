@@ -1,0 +1,11 @@
+flavors:
+  free:
+    app:
+      name: "Story App FREE"
+    android:
+      applicationId: "com.dokari4.storyappfree"
+  paid:
+    app:
+      name: "Story App"
+    android:
+      applicationId: "com.dokari4.storyapppaid"

@@ -25,7 +25,7 @@ class StoryProvider extends ChangeNotifier {
 
   StoryProvider({required this.repository});
 
-  Future<void> fetchStories(bool refresh) async {
+  void fetchStories(bool refresh) async {
     if (refresh == true) {
       pageItems = 1;
       _listStory.clear();
@@ -85,7 +85,7 @@ class StoryProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> uploadStory(
+  Future<UploadState> uploadStory(
     List<int> bytes,
     String fileName,
     String description,
@@ -105,13 +105,11 @@ class StoryProvider extends ChangeNotifier {
       uploadState = const UploadState.loading(false);
       notifyListeners();
       log(left.message);
-      uploadState = UploadState.error(left.message);
-      notifyListeners();
+      return uploadState = UploadState.error(left.message);
     }, (right) {
       uploadState = const UploadState.loading(false);
       notifyListeners();
-      uploadState = const UploadState.success("Upload Success");
-      notifyListeners();
+      return uploadState = const UploadState.success("Upload Success");
     });
   }
 
