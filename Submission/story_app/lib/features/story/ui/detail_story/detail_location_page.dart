@@ -35,6 +35,12 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    mapController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: Stack(

@@ -23,9 +23,14 @@ class _AddLocationPageState extends State<AddLocationPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     provider = context.read<StoryProvider>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mapController.dispose();
   }
 
   @override

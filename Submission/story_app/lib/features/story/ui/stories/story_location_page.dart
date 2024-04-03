@@ -19,39 +19,10 @@ class _StoryLocationPageState extends State<StoryLocationPage> {
   final Set<Marker> markers = {};
   MapType selectedMapType = MapType.normal;
 
-  LatLngBounds boundsFromLatLngList(List<LatLng> list) {
-    double? x0, x1, y0, y1;
-    for (LatLng latLng in list) {
-      if (x0 == null) {
-        x0 = x1 = latLng.latitude;
-        y0 = y1 = latLng.longitude;
-      } else {
-        if (latLng.latitude > x1!) x1 = latLng.latitude;
-        if (latLng.latitude < x0) x0 = latLng.latitude;
-        if (latLng.longitude > y1!) y1 = latLng.longitude;
-        if (latLng.longitude < y0!) y0 = latLng.longitude;
-      }
-    }
-    return LatLngBounds(
-      northeast: LatLng(x1!, y1!),
-      southwest: LatLng(x0!, y0!),
-    );
-  }
-
-  void addLocationMarker(List<LatLng> latLng) {
-    for (final place in latLng) {
-      markers.add(
-        Marker(
-          markerId: MarkerId("Location $place"),
-          position: place,
-          onTap: () {
-            mapController.animateCamera(
-              CameraUpdate.newLatLngZoom(place, 18),
-            );
-          },
-        ),
-      );
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    mapController.dispose();
   }
 
   @override
@@ -175,5 +146,40 @@ class _StoryLocationPageState extends State<StoryLocationPage> {
         );
       },
     );
+  }
+
+  LatLngBounds boundsFromLatLngList(List<LatLng> list) {
+    double? x0, x1, y0, y1;
+    for (LatLng latLng in list) {
+      if (x0 == null) {
+        x0 = x1 = latLng.latitude;
+        y0 = y1 = latLng.longitude;
+      } else {
+        if (latLng.latitude > x1!) x1 = latLng.latitude;
+        if (latLng.latitude < x0) x0 = latLng.latitude;
+        if (latLng.longitude > y1!) y1 = latLng.longitude;
+        if (latLng.longitude < y0!) y0 = latLng.longitude;
+      }
+    }
+    return LatLngBounds(
+      northeast: LatLng(x1!, y1!),
+      southwest: LatLng(x0!, y0!),
+    );
+  }
+
+  void addLocationMarker(List<LatLng> latLng) {
+    for (final place in latLng) {
+      markers.add(
+        Marker(
+          markerId: MarkerId("Location $place"),
+          position: place,
+          onTap: () {
+            mapController.animateCamera(
+              CameraUpdate.newLatLngZoom(place, 18),
+            );
+          },
+        ),
+      );
+    }
   }
 }
