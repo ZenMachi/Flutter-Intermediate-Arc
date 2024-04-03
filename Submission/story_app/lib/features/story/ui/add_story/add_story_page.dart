@@ -27,43 +27,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     storyProvider = context.read<StoryProvider>();
-    // storyProvider.addListener(_listenUploadState);
   }
-
-  // listenUploadState() {
-  //   storyProvider.uploadState.maybeWhen(
-  //     success: (value) {
-  //       storyProvider.setImageFile(null);
-  //       storyProvider.setImagePath(null);
-  //       // showSnackbar(context, "UploadSuccess");
-  //       // if (mounted) context.goNamed(Routes.root);
-  //       if (mounted) {
-  //         showSnackbar(context, "Upload Success");
-  //         context.goNamed(Routes.root);
-  //         // Future.delayed(Duration(milliseconds: 500), () {
-  //         //   context.goNamed(Routes.root);
-  //         // });
-  //       }
-  //     },
-  //     error: (value) {
-  //       if (mounted) {
-  //         showSnackbar(context, value);
-  //         // storyProvider.setImageFile(null);
-  //         storyProvider.setImagePath(null);
-  //         context.goNamed(Routes.root);
-  //       }
-  //     }, orElse: () => showSnackbar(context, "Meong"),
-  //   );
-  //
-  //   // if (storyProvider.uploadState == UploadState.success) {
-  //   //
-  //   // } else if (storyProvider.uploadState == UploadState.error) {
-  //   //
-  //   // }
-  // }
 
   @override
   void dispose() {
@@ -77,7 +43,10 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
     final state = storyProvider.uploadState;
     final stateLocation = storyProvider.latLng;
-    final address = stateLocation != null ? storyProvider.locationName : "";
+    final statePlacemark = storyProvider.placemark;
+    final address = stateLocation != null && statePlacemark != null
+        ? '${statePlacemark[0].subLocality}, ${statePlacemark[0].locality}, ${statePlacemark[0].postalCode}'
+        : "";
     final isLoading =
         state.maybeWhen(loading: (value) => value, orElse: () => false);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/common/constants.dart';
@@ -48,6 +49,8 @@ class _StoryDetailPageState extends State<StoryDetailPage> {
                           "latString": "${data.lat}",
                           "lonString": "${data.lon}",
                         };
+                        final location = LatLng(data.lat!, data.lon!);
+                        provider.setLatLng(location);
                         context.goNamed(Routes.detailLocation,
                             pathParameters: params);
                       } else {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 import 'package:provider/provider.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/features/story/widgets/placemark_widget.dart';
@@ -20,11 +19,17 @@ class _AddLocationPageState extends State<AddLocationPage> {
   final initLocation = const LatLng(-6.19801, 106.82883);
   late GoogleMapController mapController;
   late final Set<Marker> markers = {};
-  geo.Placemark? placemark;
+  late StoryProvider provider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    provider = context.read<StoryProvider>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<StoryProvider>();
     final stateLocation = provider.latLng;
 
     return Scaffold(
@@ -39,18 +44,14 @@ class _AddLocationPageState extends State<AddLocationPage> {
                     : CameraPosition(target: initLocation),
                 markers: markers,
                 onMapCreated: (controller) async {
-                  if (stateLocation != null) {
-                    final info = await geo.placemarkFromCoordinates(
-                        stateLocation.latitude, stateLocation.longitude);
+                  final info = provider.placemark;
 
+                  if (info != null && stateLocation != null) {
                     final place = info[0];
                     final street = place.street!;
                     final address =
                         '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-                    setState(() {
-                      placemark = place;
-                    });
-                    defineMarker(initLocation, street, address);
+                    defineMarker(stateLocation, street, address);
                   }
                   setState(() {
                     mapController = controller;
@@ -83,7 +84,7 @@ class _AddLocationPageState extends State<AddLocationPage> {
                   },
                 ),
               ),
-              placemark == null
+              stateLocation == null
                   ? const SizedBox()
                   : Positioned(
                       bottom: 16,
@@ -92,17 +93,15 @@ class _AddLocationPageState extends State<AddLocationPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          stateLocation != null
-                              ? FloatingActionButton(
-                                  child: const Icon(Icons.done),
-                                  onPressed: () {
-                                    context.pop();
-                                  },
-                                )
-                              : const SizedBox(),
+                          FloatingActionButton(
+                            child: const Icon(Icons.done),
+                            onPressed: () {
+                              context.pop();
+                            },
+                          ),
                           const SizedBox(height: 16),
                           PlacemarkWidget(
-                            placemark: placemark!,
+                            placemark: provider.placemark![0],
                           ),
                         ],
                       ),
@@ -140,22 +139,19 @@ class _AddLocationPageState extends State<AddLocationPage> {
 
     locationData = await location.getLocation();
     final latLng = LatLng(locationData.latitude!, locationData.longitude!);
-    final info =
-        await geo.placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    provider.setLatLng(latLng);
+    await provider.setPlacemark();
 
-    final place = info[0];
-    final street = place.street!;
-    final address =
-        '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    setState(() {
-      placemark = place;
-    });
-    if (mounted) {
-      final provider = context.read<StoryProvider>();
-      provider.setLatLng(latLng);
-      provider.setLocationName();
+    final info = provider.placemark;
+
+    if (info != null) {
+
+      final place = info[0];
+      final street = place.street!;
+      final address =
+          '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      defineMarker(latLng, street, address);
     }
-    defineMarker(latLng, street, address);
 
     mapController.animateCamera(
       CameraUpdate.newLatLngZoom(latLng, 18),
@@ -163,23 +159,19 @@ class _AddLocationPageState extends State<AddLocationPage> {
   }
 
   void onLongPressGoogleMap(LatLng latLng) async {
-    final info =
-        await geo.placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    provider.setLatLng(latLng);
+    await provider.setPlacemark();
 
-    final place = info[0];
-    final street = place.street!;
-    final address =
-        '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    setState(() {
-      placemark = place;
-    });
+    final info = provider.placemark;
 
-    if (mounted) {
-      final provider = context.read<StoryProvider>();
-      provider.setLatLng(latLng);
-      provider.setLocationName();
+    if (info != null) {
+
+      final place = info[0];
+      final street = place.street!;
+      final address =
+          '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      defineMarker(latLng, street, address);
     }
-    defineMarker(latLng, street, address);
 
     mapController.animateCamera(
       CameraUpdate.newLatLng(latLng),

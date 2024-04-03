@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:story_app/features/story/provider/story_provider.dart';
+import 'package:story_app/features/story/widgets/placemark_widget.dart';
 
 class DetailLocationPage extends StatefulWidget {
   final String latString;
@@ -15,29 +18,20 @@ class DetailLocationPage extends StatefulWidget {
 
 class _DetailLocationPageState extends State<DetailLocationPage> {
   late GoogleMapController mapController;
+  late StoryProvider provider;
   late LatLng location;
   final Set<Marker> markers = {};
   MapType selectedMapType = MapType.normal;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    provider = context.read<StoryProvider>();
     location = LatLng(
       double.parse(widget.latString),
       double.parse(widget.lonString),
     );
-    markers.add(
-      Marker(
-        markerId: MarkerId("Location $location"),
-        position: location,
-        onTap: () {
-          mapController.animateCamera(
-            CameraUpdate.newLatLngZoom(location, 18),
-          );
-        },
-      ),
-    );
+    setPlacemark();
   }
 
   @override
@@ -52,7 +46,7 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
               target: location,
               zoom: 18,
             ),
-            onMapCreated: (controller) {
+            onMapCreated: (controller) async {
               setState(() {
                 mapController = controller;
               });
@@ -68,6 +62,7 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
               heroTag: "back",
               onPressed: () {
                 context.pop();
+                provider.setLatLng(null);
               },
               child: const Icon(Icons.arrow_back),
             ),
@@ -75,7 +70,9 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
           Positioned(
             bottom: 16,
             right: 16,
+            left: 16,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 FloatingActionButton.small(
                   heroTag: "zoom-in",
@@ -95,6 +92,11 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
                   },
                   child: const Icon(Icons.remove),
                 ),
+                const SizedBox(height: 8,),
+                provider.placemark != null ?
+                PlacemarkWidget(
+                  placemark: provider.placemark![0],
+                ) : const SizedBox(),
               ],
             ),
           ),
@@ -136,5 +138,33 @@ class _DetailLocationPageState extends State<DetailLocationPage> {
         ],
       ),
     );
+  }
+
+  void setPlacemark() async {
+    await provider.setPlacemark();
+    final info = provider.placemark;
+
+    if (info != null) {
+      final place = info[0];
+      final street = place.street!;
+      final address =
+          '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      defineMarker(location, street, address);
+    }
+  }
+
+  void defineMarker(LatLng latLng, String street, String address) {
+    final marker = Marker(
+        markerId: const MarkerId("source"),
+        position: latLng,
+        infoWindow: InfoWindow(
+          title: street,
+          snippet: address,
+        ));
+
+    setState(() {
+      markers.clear();
+      markers.add(marker);
+    });
   }
 }

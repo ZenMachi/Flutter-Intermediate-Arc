@@ -15,7 +15,7 @@ class StoryProvider extends ChangeNotifier {
   XFile? imageFile;
   LatLng? latLng;
   late List<LatLng> listLatLng;
-  String? locationName;
+  List<geo.Placemark>? placemark;
   int? pageItems = 1;
   int sizeItems = 5;
   late List<Story> _listStory;
@@ -113,14 +113,14 @@ class StoryProvider extends ChangeNotifier {
     });
   }
 
-  void setLocationName() async {
-    final info =
-        await geo.placemarkFromCoordinates(latLng!.latitude, latLng!.longitude);
+  Future<void> setPlacemark() async {
+    final info = await geo.placemarkFromCoordinates(
+      latLng!.latitude,
+      latLng!.longitude,
+    );
 
-    final place = info[0];
-    final address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    locationName = address;
+    placemark = info;
+    notifyListeners();
   }
 
   void setLatLng(LatLng? location) {
