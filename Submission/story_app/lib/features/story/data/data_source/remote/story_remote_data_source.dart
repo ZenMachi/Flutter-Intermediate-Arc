@@ -14,12 +14,12 @@ class StoryRemoteDataSource {
 
   StoryRemoteDataSource(this.client);
 
-  Future<StoriesResponse> getStories(String token) async {
-    final queryParams = {
-      "page": "1",
-      "size": "5",
-      "location": "0",
-    };
+  Future<StoriesResponse> getStories(String token, int page, int size) async {
+    final Map<String, String> queryParams = {
+      "page": page,
+      "size": size,
+      "location": 0,
+    }.map((key, value) => MapEntry(key, value.toString()));
     final headers = {HttpHeaders.authorizationHeader: "Bearer $token"};
     final uri = Uri.https(
       ApiLinks.baseUrl,
@@ -67,6 +67,8 @@ class StoryRemoteDataSource {
     String fileName,
     String description,
     String token,
+    double? lat,
+    double? lon,
   ) async {
     final headers = {
       HttpHeaders.contentTypeHeader: "multipart/form-data",
@@ -84,9 +86,15 @@ class StoryRemoteDataSource {
       filename: fileName,
     );
 
-    final Map<String, String> fields = {
-      "description": description,
-    };
+    final Map<String, String> fields = lat != null && lon != null
+        ? {
+            "description": description,
+            "lat": lat.toString(),
+            "lon": lon.toString(),
+          }
+        : {
+            "description": description,
+          };
 
     request.files.add(multiPartFile);
     request.fields.addAll(fields);

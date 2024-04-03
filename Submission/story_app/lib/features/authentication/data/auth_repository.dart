@@ -19,7 +19,7 @@ class AuthRepository {
     try {
       final result = await remoteDataSource.postLoginInfo(user);
       if (result.error == false) {
-        await localDataSource.saveUser(result.loginResult!);
+        await localDataSource.saveUser(result.loginResult);
         await localDataSource.login();
       }
 

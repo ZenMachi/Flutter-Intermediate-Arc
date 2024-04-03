@@ -58,6 +58,11 @@ dependencies:
 # Model
   json_annotation:
   freezed_annotation:
+# Location
+  google_maps_flutter:
+  google_maps_flutter_web:
+  location:
+  geocoding:
 
 dev_dependencies:
   flutter_test:

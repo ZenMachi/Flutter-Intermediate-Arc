@@ -26,6 +26,7 @@
   "textPassword" : "Kata Sandi",
   "textName" : "Nama",
   "textLanguage": "Bahasa",
+  "textLocation": "Lokasi",
   "errorValidateName": "Masukan Nama Anda",
   "errorValidatePass": "Minimal Panjang Password 8 digit",
   "errorValidateEmail": "Masukan Email yang Benar",

@@ -1,123 +1,88 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:story_app/features/story/data/model/detail/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories/stories_response.dart';
-import 'package:story_app/features/story/data/model/upload/upload_response.dart';
+import 'package:story_app/features/story/data/model/state/detail_story_state.dart';
+import 'package:story_app/features/story/data/model/state/stories_state.dart';
+import 'package:story_app/features/story/data/model/state/upload_state.dart';
+import 'package:story_app/features/story/data/model/stories/story.dart';
 import 'package:story_app/features/story/data/story_repository.dart';
-import 'package:story_app/utils/result_state.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 class StoryProvider extends ChangeNotifier {
   final StoryRepository repository;
-  late ResultState _state;
-  String _message = '';
   String? imagePath;
   XFile? imageFile;
-  bool isLoading = false;
-  late StoriesResponse _storiesResponse;
-  late DetailStoryResponse _detailStoryResponse;
-  late UploadResponse? _uploadResponse;
-
-  ResultState get state => _state;
-
-  String get message => _message;
-
-  StoriesResponse get storiesResult => _storiesResponse;
-
-  DetailStoryResponse get storyDetailResult => _detailStoryResponse;
-
-  UploadResponse? get uploadResult => _uploadResponse;
+  LatLng? latLng;
+  late List<LatLng> listLatLng;
+  String? locationName;
+  int? pageItems = 1;
+  int sizeItems = 5;
+  late List<Story> _listStory;
+  StoriesState storiesState = const StoriesState.initial();
+  DetailStoryState detailStoryState = const DetailStoryState.initial();
+  UploadState uploadState = const UploadState.loading(false);
 
   StoryProvider({required this.repository});
 
-  Future<dynamic> fetchStories() async {
-    _state = ResultState.loading;
-    notifyListeners();
+  Future<void> fetchStories(bool refresh) async {
+    if (refresh == true) {
+      pageItems = 1;
+      _listStory.clear();
+      notifyListeners();
+    }
+    if (pageItems == 1) {
+      _listStory = List<Story>.empty(growable: true);
+      listLatLng = List<LatLng>.empty(growable: true);
+      storiesState = const StoriesState.loading();
+      notifyListeners();
+    }
 
-    final result = await repository.getStories();
+    final result = await repository.getStories(pageItems!, sizeItems);
 
     return result.fold((left) {
-      _state = ResultState.error;
+      storiesState = StoriesState.error(left.message);
       notifyListeners();
-
-      _message = left.message;
-      log(_message);
-      return _message;
+      log(left.message);
     }, (right) {
-      _state = ResultState.hasData;
-      notifyListeners();
-      return _storiesResponse = right;
-    });
+      log(pageItems.toString());
 
-    // try {
-    //   _state = ResultState.loading;
-    //   notifyListeners();
-    //
-    //   final result = await apiService.getStories();
-    //
-    //   if (result.listStory.isEmpty) {
-    //     _state = ResultState.noData;
-    //     notifyListeners();
-    //
-    //     return _message = "There is no data";
-    //   } else {
-    //     _state = ResultState.hasData;
-    //     notifyListeners();
-    //
-    //     return _storiesResponse = result;
-    //   }
-    // } catch (e) {
-    //   _state = ResultState.error;
-    //   log('ErrorFetch --> $e');
-    //   notifyListeners();
-    //
-    //   return _message = "Please Check Your Internet Connection";
-    // }
+      _listStory.addAll(right.listStory);
+      storiesState = StoriesState.loaded(_listStory);
+      for (final data in _listStory) {
+        if (data.lon != null && data.lat != null) {
+          final location = LatLng(data.lat!, data.lon!);
+          log(location.toString());
+          listLatLng.add(location);
+        }
+      }
+      notifyListeners();
+
+      log(_listStory.length.toString());
+
+      if (result.right.listStory.length < sizeItems) {
+        pageItems = null;
+      } else {
+        pageItems = pageItems! + 1;
+      }
+      notifyListeners();
+    });
   }
 
   Future<dynamic> fetchDetailStory(String id) async {
-    _state = ResultState.loading;
+    detailStoryState = const DetailStoryState.loading();
     notifyListeners();
 
     final result = await repository.getDetailStory(id);
 
     return result.fold((left) {
-      _state = ResultState.error;
+      detailStoryState = DetailStoryState.error(left.message);
       notifyListeners();
-
-      _message = left.message;
-      log(_message);
-      return _message;
+      log(left.message);
     }, (right) {
-      _state = ResultState.hasData;
+      detailStoryState = DetailStoryState.loaded(right.story);
       notifyListeners();
-      return _detailStoryResponse = right;
     });
-
-    // try {
-    //   _state = ResultState.loading;
-    //   notifyListeners();
-    //
-    //   final result = await apiService.getDetailStory(id);
-    //
-    //   if (result.error == true) {
-    //     _state = ResultState.error;
-    //     notifyListeners();
-    //
-    //     return _message = "Error Reason: ${result.message}";
-    //   } else {
-    //     _state = ResultState.hasData;
-    //     notifyListeners();
-    //
-    //     return _detailStoryResponse = result;
-    //   }
-    // } catch (e) {
-    //   _state = ResultState.error;
-    //   log('ErrorFetch --> $e');
-    //   notifyListeners();
-    //
-    //   return _message = "Please Check Your Internet Connection";
-    // }
   }
 
   Future<void> uploadStory(
@@ -125,47 +90,44 @@ class StoryProvider extends ChangeNotifier {
     String fileName,
     String description,
   ) async {
-    _state = ResultState.loading;
+    uploadState = const UploadState.loading(true);
     notifyListeners();
 
-    final result = await repository.uploadStory(bytes, fileName, description);
+    final result = await repository.uploadStory(
+      bytes,
+      fileName,
+      description,
+      latLng?.latitude,
+      latLng?.longitude,
+    );
 
     return result.fold((left) {
-      isLoading = false;
-      _state = ResultState.success;
+      uploadState = const UploadState.loading(false);
       notifyListeners();
-
-      _message = left.message;
-      log(_message);
+      log(left.message);
+      uploadState = UploadState.error(left.message);
+      notifyListeners();
     }, (right) {
-      _state = ResultState.success;
-      _message = "Upload Success";
+      uploadState = const UploadState.loading(false);
       notifyListeners();
-      isLoading = right;
+      uploadState = const UploadState.success("Upload Success");
+      notifyListeners();
     });
+  }
 
-    // try {
-    //   _message = "";
-    //   _uploadResponse = null;
-    //   isLoading = true;
-    //   notifyListeners();
-    //   final response =  await apiService.postUploadStory(
-    //     bytes,
-    //     fileName,
-    //     description,
-    //   );
-    //
-    //   _uploadResponse = response;
-    //   _message = _uploadResponse?.message ?? "success";
-    //   log(_message);
-    //   isLoading = false;
-    //   notifyListeners();
-    // } catch (e) {
-    //   isLoading = false;
-    //   _message = e.toString();
-    //   log('Error Post --> $_message');
-    //   notifyListeners();
-    // }
+  void setLocationName() async {
+    final info =
+        await geo.placemarkFromCoordinates(latLng!.latitude, latLng!.longitude);
+
+    final place = info[0];
+    final address =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    locationName = address;
+  }
+
+  void setLatLng(LatLng? location) {
+    latLng = location;
+    notifyListeners();
   }
 
   void setImagePath(String? path) {

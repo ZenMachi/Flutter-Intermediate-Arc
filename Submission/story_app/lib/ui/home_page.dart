@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
 
     if (location == Routes.root) return 0;
     if (location == '/${Routes.addStory}') return 1;
+    if (location == '/${Routes.addStory}/${Routes.addLocation}') return 1;
     if (location == '/${Routes.settings}') return 2;
     return 0;
   }

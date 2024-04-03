@@ -8,9 +8,12 @@ import 'package:story_app/features/authentication/data/data_source/remote/auth_r
 import 'package:story_app/features/authentication/ui/login_page.dart';
 import 'package:story_app/features/authentication/ui/register_page.dart';
 import 'package:story_app/features/settings/ui/settings_page.dart';
-import 'package:story_app/features/story/ui/add_story_page.dart';
-import 'package:story_app/features/story/ui/story_detail_page.dart';
-import 'package:story_app/features/story/ui/story_page.dart';
+import 'package:story_app/features/story/ui/add_story/add_location_page.dart';
+import 'package:story_app/features/story/ui/add_story/add_story_page.dart';
+import 'package:story_app/features/story/ui/detail_story/detail_location_page.dart';
+import 'package:story_app/features/story/ui/detail_story/story_detail_page.dart';
+import 'package:story_app/features/story/ui/stories/story_location_page.dart';
+import 'package:story_app/features/story/ui/stories/story_page.dart';
 import 'package:story_app/ui/home_page.dart';
 
 class AppRouter {
@@ -61,6 +64,15 @@ class AppRouter {
                 pageBuilder: (context, state) => NoTransitionPage(
                   child: StoryDetailPage(id: state.pathParameters["id"]!),
                 ),
+                routes: [
+                  GoRoute(
+                      name: Routes.detailLocation,
+                      path: "${Routes.detailLocation}/:latString,:lonString",
+                      pageBuilder: (context, state) => NoTransitionPage(
+                        child: DetailLocationPage(latString: state.pathParameters["latString"]!, lonString: state.pathParameters["lonString"]!,),
+                      ),
+                  ),
+                ],
               ),
               GoRoute(
                 name: Routes.addStory,
@@ -68,12 +80,28 @@ class AppRouter {
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: AddStoryPage(),
                 ),
+                routes: [
+                  GoRoute(
+                    name: Routes.addLocation,
+                    path: Routes.addLocation,
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: AddLocationPage(),
+                    ),
+                  ),
+                ],
               ),
               GoRoute(
                 name: Routes.settings,
                 path: Routes.settings,
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: SettingsPage(),
+                ),
+              ),
+              GoRoute(
+                name: Routes.maps,
+                path: Routes.maps,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: StoryLocationPage(),
                 ),
               ),
             ],

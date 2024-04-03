@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (context) => storyProvider..fetchStories(),
+              create: (context) => storyProvider..fetchStories(false),
             ),
             ChangeNotifierProvider(
               create: (context) => authProvider,
