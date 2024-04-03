@@ -8,5 +8,4 @@ class StoriesState with _$StoriesState {
   const factory StoriesState.loading() = StoriesStateLoading;
   const factory StoriesState.loaded(List<Story> listData) = StoriesStateLoaded;
   const factory StoriesState.error(String message) = StoriesStateError;
-
 }

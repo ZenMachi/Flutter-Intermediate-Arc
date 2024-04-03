@@ -7,7 +7,6 @@ part 'stories_response.freezed.dart';
 
 @freezed
 class StoriesResponse with _$StoriesResponse {
-
   const factory StoriesResponse({
     @JsonKey(name: "error") required bool error,
     @JsonKey(name: "message") required String message,

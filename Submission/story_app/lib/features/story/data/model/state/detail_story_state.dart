@@ -8,5 +8,4 @@ class DetailStoryState with _$DetailStoryState {
   const factory DetailStoryState.loading() = DetailStoryStateLoading;
   const factory DetailStoryState.loaded(Story data) = DetailStoryStateLoaded;
   const factory DetailStoryState.error(String message) = DetailStoryStateError;
-
 }

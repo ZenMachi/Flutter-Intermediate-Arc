@@ -1,14 +1,11 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/story/data/model/state/upload_state.dart';
 import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/flavors/flavors.dart';
 import 'package:story_app/localization/localization.dart';
@@ -24,7 +21,6 @@ class AddStoryPage extends StatefulWidget {
 
 class _AddStoryPageState extends State<AddStoryPage> {
   late StoryProvider storyProvider;
-  late Function() _listenUploadState;
   final controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var text = '';
@@ -227,7 +223,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
   }
 
   void _onUpload(String description, StoryProvider provider) async {
-    final state = provider.uploadState;
     final imagePath = provider.imagePath;
     final imageFile = provider.imageFile;
 

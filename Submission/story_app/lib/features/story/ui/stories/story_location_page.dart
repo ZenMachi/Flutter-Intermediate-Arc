@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -55,6 +53,7 @@ class _StoryLocationPageState extends State<StoryLocationPage> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StoryProvider>(
@@ -71,105 +70,104 @@ class _StoryLocationPageState extends State<StoryLocationPage> {
             addLocationMarker(provider.listLatLng);
 
             return Center(
-                child: Stack(
-                  children: [
-                    GoogleMap(
-                      markers: markers,
-                      mapType: selectedMapType,
-                      initialCameraPosition: CameraPosition(
-                        target: initLocation,
-                        zoom: 18,
-                      ),
-                      onMapCreated: (controller) {
-                        setState(() {
-                          mapController = controller;
-                        });
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    markers: markers,
+                    mapType: selectedMapType,
+                    initialCameraPosition: CameraPosition(
+                      target: initLocation,
+                      zoom: 18,
+                    ),
+                    onMapCreated: (controller) {
+                      setState(() {
+                        mapController = controller;
+                      });
 
-                        final bound = boundsFromLatLngList(
-                            provider.listLatLng);
-                        mapController.animateCamera(
-                          CameraUpdate.newLatLngBounds(bound, 50),
-                        );
+                      final bound = boundsFromLatLngList(provider.listLatLng);
+                      mapController.animateCamera(
+                        CameraUpdate.newLatLngBounds(bound, 50),
+                      );
+                    },
+                    myLocationButtonEnabled: false,
+                    zoomControlsEnabled: false,
+                    mapToolbarEnabled: false,
+                  ),
+                  Positioned(
+                    top: 32,
+                    left: 16,
+                    child: FloatingActionButton.small(
+                      heroTag: "back",
+                      onPressed: () {
+                        context.pop();
                       },
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
-                      mapToolbarEnabled: false,
+                      child: const Icon(Icons.arrow_back),
                     ),
-                    Positioned(
-                      top: 32,
-                      left: 16,
-                      child: FloatingActionButton.small(
-                          heroTag: "back",
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    right: 16,
+                    child: Column(
+                      children: [
+                        FloatingActionButton.small(
+                          heroTag: "zoom-in",
                           onPressed: () {
-                            context.pop();
+                            mapController.animateCamera(
+                              CameraUpdate.zoomIn(),
+                            );
                           },
-                        child: const Icon(Icons.arrow_back),
-                      ),
+                          child: const Icon(Icons.add),
+                        ),
+                        FloatingActionButton.small(
+                          heroTag: "zoom-out",
+                          onPressed: () {
+                            mapController.animateCamera(
+                              CameraUpdate.zoomOut(),
+                            );
+                          },
+                          child: const Icon(Icons.remove),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      bottom: 16,
-                      right: 16,
-                      child: Column(
-                        children: [
-                          FloatingActionButton.small(
-                            heroTag: "zoom-in",
-                            onPressed: () {
-                              mapController.animateCamera(
-                                CameraUpdate.zoomIn(),
-                              );
-                            },
-                            child: const Icon(Icons.add),
+                  ),
+                  Positioned(
+                    top: 32,
+                    right: 16,
+                    child: FloatingActionButton.small(
+                      onPressed: null,
+                      child: PopupMenuButton<MapType>(
+                        offset: const Offset(0, 54),
+                        icon: const Icon(Icons.layers_outlined),
+                        onSelected: (MapType item) {
+                          setState(() {
+                            selectedMapType = item;
+                          });
+                        },
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<MapType>>[
+                          const PopupMenuItem<MapType>(
+                            value: MapType.normal,
+                            child: Text('Normal'),
                           ),
-                          FloatingActionButton.small(
-                            heroTag: "zoom-out",
-                            onPressed: () {
-                              mapController.animateCamera(
-                                CameraUpdate.zoomOut(),
-                              );
-                            },
-                            child: const Icon(Icons.remove),
+                          const PopupMenuItem<MapType>(
+                            value: MapType.satellite,
+                            child: Text('Satellite'),
+                          ),
+                          const PopupMenuItem<MapType>(
+                            value: MapType.terrain,
+                            child: Text('Terrain'),
+                          ),
+                          const PopupMenuItem<MapType>(
+                            value: MapType.hybrid,
+                            child: Text('Hybrid'),
                           ),
                         ],
                       ),
                     ),
-                    Positioned(
-                      top: 32,
-                      right: 16,
-                      child: FloatingActionButton.small(
-                        onPressed: null,
-                        child: PopupMenuButton<MapType>(
-                          offset: const Offset(0, 54),
-                          icon: const Icon(Icons.layers_outlined),
-                          onSelected: (MapType item) {
-                            setState(() {
-                              selectedMapType = item;
-                            });
-                          },
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<MapType>>[
-                            const PopupMenuItem<MapType>(
-                              value: MapType.normal,
-                              child: Text('Normal'),
-                            ),
-                            const PopupMenuItem<MapType>(
-                              value: MapType.satellite,
-                              child: Text('Satellite'),
-                            ),
-                            const PopupMenuItem<MapType>(
-                              value: MapType.terrain,
-                              child: Text('Terrain'),
-                            ),
-                            const PopupMenuItem<MapType>(
-                              value: MapType.hybrid,
-                              child: Text('Hybrid'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
+                  )
+                ],
+              ),
+            );
           },
           error: (value) {
             return ErrorPage(error: value.message);

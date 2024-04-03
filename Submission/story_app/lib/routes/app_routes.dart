@@ -66,11 +66,14 @@ class AppRouter {
                 ),
                 routes: [
                   GoRoute(
-                      name: Routes.detailLocation,
-                      path: "${Routes.detailLocation}/:latString,:lonString",
-                      pageBuilder: (context, state) => NoTransitionPage(
-                        child: DetailLocationPage(latString: state.pathParameters["latString"]!, lonString: state.pathParameters["lonString"]!,),
+                    name: Routes.detailLocation,
+                    path: "${Routes.detailLocation}/:latString,:lonString",
+                    pageBuilder: (context, state) => NoTransitionPage(
+                      child: DetailLocationPage(
+                        latString: state.pathParameters["latString"]!,
+                        lonString: state.pathParameters["lonString"]!,
                       ),
+                    ),
                   ),
                 ],
               ),

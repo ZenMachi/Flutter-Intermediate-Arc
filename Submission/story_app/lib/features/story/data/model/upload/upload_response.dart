@@ -7,13 +7,14 @@ part 'upload_response.freezed.dart';
 
 @freezed
 class UploadResponse with _$UploadResponse {
-
   const factory UploadResponse({
     @JsonKey(name: "error") required bool error,
     @JsonKey(name: "message") required String message,
   }) = _UploadResponse;
 
-  factory UploadResponse.fromJson(Map<String, dynamic> json) => _$UploadResponseFromJson(json);
+  factory UploadResponse.fromJson(Map<String, dynamic> json) =>
+      _$UploadResponseFromJson(json);
 
-  factory UploadResponse.fromJsonString(String source) => UploadResponse.fromJson(json.decode(source));
+  factory UploadResponse.fromJsonString(String source) =>
+      UploadResponse.fromJson(json.decode(source));
 }

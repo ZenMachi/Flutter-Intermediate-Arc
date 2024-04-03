@@ -14,8 +14,6 @@ import 'package:story_app/features/story/provider/story_provider.dart';
 import 'package:story_app/localization/localization.dart';
 import 'package:story_app/routes/app_routes.dart';
 
-import 'flavors/flavors.dart';
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -69,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, provider, child) {
               return MaterialApp.router(
                 routeInformationProvider:
-                AppRouter.router.routeInformationProvider,
+                    AppRouter.router.routeInformationProvider,
                 routeInformationParser: AppRouter.router.routeInformationParser,
                 routerDelegate: AppRouter.router.routerDelegate,
                 debugShowCheckedModeBanner: false,
@@ -80,7 +78,7 @@ class _MyAppState extends State<MyApp> {
                 themeMode: provider.themeMode,
                 theme: ThemeData(
                   colorScheme:
-                  ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+                      ColorScheme.fromSeed(seedColor: Colors.lightGreen),
                   useMaterial3: true,
                 ),
                 darkTheme: ThemeData(
