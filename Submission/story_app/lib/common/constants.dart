@@ -2,6 +2,9 @@ class Routes {
   static const root = "/";
   static const storyDetails = "details";
   static const addStory = "add";
+  static const addLocation = "location";
+  static const maps = "maps";
+  static const detailLocation = "user-location";
   static const settings = "settings";
   static const login = "/login";
   static const register = "/register";

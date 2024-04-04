@@ -26,6 +26,7 @@
   "textPassword" : "Password",
   "textName" : "Name",
   "textLanguage": "Language",
+  "textLocation": "Location",
   "errorValidateName": "Please enter Your name",
   "errorValidatePass": "Minimal Character length is 8",
   "errorValidateEmail": "Please Enter a Valid Email",

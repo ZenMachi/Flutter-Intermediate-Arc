@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:http/http.dart'
     show Client, MultipartFile, MultipartRequest, StreamedResponse;
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/story/data/model/detail_story_response.dart';
-import 'package:story_app/features/story/data/model/stories_response.dart';
-import 'package:story_app/features/story/data/model/upload_response.dart';
+import 'package:story_app/features/story/data/model/detail/detail_story_response.dart';
+import 'package:story_app/features/story/data/model/stories/stories_response.dart';
+import 'package:story_app/features/story/data/model/upload/upload_response.dart';
 import 'package:story_app/utils/exceptions/exceptions.dart';
 
 class StoryRemoteDataSource {
@@ -14,12 +14,12 @@ class StoryRemoteDataSource {
 
   StoryRemoteDataSource(this.client);
 
-  Future<StoriesResponse> getStories(String token) async {
-    final queryParams = {
-      "page": "1",
-      "size": "5",
-      "location": "0",
-    };
+  Future<StoriesResponse> getStories(String token, int page, int size) async {
+    final Map<String, String> queryParams = {
+      "page": page,
+      "size": size,
+      "location": 0,
+    }.map((key, value) => MapEntry(key, value.toString()));
     final headers = {HttpHeaders.authorizationHeader: "Bearer $token"};
     final uri = Uri.https(
       ApiLinks.baseUrl,
@@ -67,6 +67,8 @@ class StoryRemoteDataSource {
     String fileName,
     String description,
     String token,
+    double? lat,
+    double? lon,
   ) async {
     final headers = {
       HttpHeaders.contentTypeHeader: "multipart/form-data",
@@ -84,9 +86,15 @@ class StoryRemoteDataSource {
       filename: fileName,
     );
 
-    final Map<String, String> fields = {
-      "description": description,
-    };
+    final Map<String, String> fields = lat != null && lon != null
+        ? {
+            "description": description,
+            "lat": lat.toString(),
+            "lon": lon.toString(),
+          }
+        : {
+            "description": description,
+          };
 
     request.files.add(multiPartFile);
     request.fields.addAll(fields);
@@ -100,13 +108,13 @@ class StoryRemoteDataSource {
 
     if (statusCode == 201) {
       final UploadResponse uploadResponse =
-          UploadResponse.fromJson(responseData);
+          UploadResponse.fromJsonString(responseData);
       return uploadResponse;
     } else if (statusCode == 400) {
-      final message = UploadResponse.fromJson(responseData);
+      final message = UploadResponse.fromJsonString(responseData);
       throw BadRequestException(message.message);
     } else if (statusCode == 401) {
-      final message = UploadResponse.fromJson(responseData);
+      final message = UploadResponse.fromJsonString(responseData);
       throw UnauthorizedException(message.message);
     } else {
       throw Exception("Unhandled Exception");

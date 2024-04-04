@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:story_app/features/authentication/data/auth_repository.dart';
-import 'package:story_app/features/authentication/data/model/login.dart';
-import 'package:story_app/features/authentication/data/model/login_response.dart';
-import 'package:story_app/features/authentication/data/model/register.dart';
-import 'package:story_app/features/authentication/data/model/register_response.dart';
+import 'package:story_app/features/authentication/data/model/login/login_form.dart';
+import 'package:story_app/features/authentication/data/model/login/login_response.dart';
+import 'package:story_app/features/authentication/data/model/register/register.dart';
+import 'package:story_app/features/authentication/data/model/register/register_response.dart';
 import 'package:story_app/utils/result_state.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -27,7 +27,7 @@ class AuthProvider extends ChangeNotifier {
 
   RegisterResponse get registerResponse => _registerResponse;
 
-  Future<bool> loginUser(LoginInfo loginInfo) async {
+  Future<bool> loginUser(LoginForm loginInfo) async {
     _state = ResultState.loading;
     isLoading = true;
     notifyListeners();

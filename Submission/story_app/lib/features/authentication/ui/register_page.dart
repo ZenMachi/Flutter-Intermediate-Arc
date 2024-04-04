@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/common/constants.dart';
-import 'package:story_app/features/authentication/data/model/register.dart';
+import 'package:story_app/features/authentication/data/model/register/register.dart';
 import 'package:story_app/features/authentication/provider/auth_provider.dart';
 import 'package:story_app/localization/localization.dart';
 import 'package:story_app/utils/show_snackbar.dart';
