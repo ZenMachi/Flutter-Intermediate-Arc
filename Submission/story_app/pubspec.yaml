@@ -2,7 +2,7 @@ name: story_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.2 <4.0.0'
+  sdk: ">=3.3.2 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,12 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-# UI
+  # UI
   cupertino_icons: ^1.0.6
   google_fonts:
   sizer:
-# Utils
+  # Utils
   email_validator:
   either_dart:
   flutter_web_plugins:
@@ -44,21 +43,21 @@ dependencies:
   image:
   image_picker:
   image_picker_windows:
-# Network
+  # Network
   http:
-# Router
+  # Router
   go_router:
   provider:
-# Localization
+  # Localization
   flutter_localizations:
     sdk: flutter
   intl:
-# LocalStorage
+  # LocalStorage
   shared_preferences:
-# Model
+  # Model
   json_annotation:
   freezed_annotation:
-# Location
+  # Location
   google_maps_flutter:
   google_maps_flutter_web:
   location:
@@ -67,9 +66,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   flutter_flavorizr:
-# Model
+  # Model
   build_runner:
   json_serializable:
   freezed:
@@ -81,4 +80,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-
